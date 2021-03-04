@@ -645,8 +645,99 @@ Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me q
 
 
 \section{Aprendizaje por refuerzo}
+\textit{
+Un \underline{agente} (similar a modelo) tiene sensores para observar el \underline{estado} de su entorno. Con el cual puede hacer \underline{acciones} para alterar ese estado. Estas acciones conllevan una \underline{recompensa} numérica.
+}
+
+%imagen
+
+Estas recompensas que el agente recibe vienen con cierta demora. Ya que hay que discernir entre cuales fueron las meritorias.
+
+
+\subsection{Q-Learning}
+Algoritmo con el cual se controla el aprendizaje. Se busca aprender la función óptima fruto de la política óptima.
+
+Se le indica un $\alpha$ (learning rate) que indica que tanto aprende. Si se aumenta mucho puede llevar a un mínimo local. Si es muy bajo el agente no se va a estar moviendo.
+
+¿Como determinar la acción en base al estado? Hay que buscar un equilibrio entre la explotación y la exploración. Hay 2 estrategias para esto.
+
+\begin{itemize} %revisar
+    \item $\epsilon-greedy$ Con la probabilidad $\epsilon$ elegimos al azar uno, y con 1-$\epsilon$ elegimos la acción que mejor conocemos.
+    \item $\epsilon-first$ Elegimos al azar cierta cantidad de casos, y después el que mejor conocemos. 
+\end{itemize}
+
+Este algoritmo (Q-Learning) tiene los problemas de que no aprende la noción de estados similares y de que a nivel practico no escala bien, se vuelve intratable (no es el caso teórico). Una alternativa para evitar esto, es aproximar la función Q del algoritmo con una red neuronal de convolución.
 
 \section{Ética y moral en ML}
+\subsection{¿Por que discutirlo?}
+\begin{itemize}
+    \item Impacto económico
+    \begin{itemize}
+        \item Hay mucha materia prima (datos)
+        \item Mucha capacidad de procesamiento y almacenamiento
+        \item Centrales de datos
+    \end{itemize}
+\end{itemize}
+
+\subsection{Posicionamientos}
+\begin{itemize}
+    \item Optimista
+    \begin{itemize}
+        \item No confinar o intentar controlar a la IA
+        \item Enseñarle los valores humanos.
+        \item Hay que tener un planteo simbiotico.
+    \end{itemize}
+    \item Pesimista
+        \begin{itemize}
+        \item .%completar
+    \end{itemize}
+    \item Realistas
+        \begin{itemize}
+        \item Es falso el desarrollo exponencial de la IA
+        \item Es falso que constituyen un peligro
+        \item Los progresos son lineales
+    \end{itemize}
+\end{itemize}
+
+\subsection{Usos}
+La IA tiene muchos usos. Estos varían desde asistentes personales, redes de transporte, buscadores, publicidad, etc. 
+
+\subsection{Preguntas a hacerse}
+\begin{itemize}
+    \item ¿Quien guarda la información?
+    \item ¿Violación de derechos?
+\end{itemize}
+
+Hay que hacer los problemas y cuestiones éticas explícitos. Evitar los sesgos y las violaciones de privacidad.
+
+Estas cuestiones no pueden quedar en pasarle la responsabilidad al usuario directamente, ya que el usuario es el ultimo en la cadena de desarrollo. Las empresas disponen de una mayor cantidad de herramientas para tratar los temas.
+
+Una forma es incorporar las cuestiones éticas en los métodos de diseño, y alinearlos a los valores humanos. El tema que surge es: ¿Cuales? ¿Quien los decide?  ¿Con que interpretación? Son cuestiones que hay que definir. Dejar de forma clara que es desleal y que no.
+
+\subsection{Teorías éticas}
+\begin{itemize}
+    \item Meta-ética: Estudia los principios. \textit{Ej. Objetivismo vs Relativismo}
+    
+    \item Ética Normativa: La que genera reglas y nos interesa en \textit{Machine Learning}
+    
+    \item Ética Aplicada: Trata las situaciones sociales. \textit{Ej. Derechos de animales, eutanasia...}
+\end{itemize}
+
+\subsection{Ética Normativa}
+\begin{itemize}
+    \item Ética de la virtud: Busca la moralidad de una acción. Hábitos vs Reglas.
+    \item Ética consecuencialista: Evalúa el resultado.
+    \item Ética deontológica: Propone evaluar la moralidad de una acción
+\end{itemize}
+
+
+Tiene 2 enfoques:
+\begin{itemize}
+    \item Top-Down: Se basa en el deber, toma la teoría previa y la deriva.
+    \item Bottom-Up: Se intenta capturar la teoría a partir de la observación. Aprendizaje, emoción.
+\end{itemize}
+
+Ambas tienen el problema del marco. El cual se basa en el impacto en el contexto. Se puede medir que sucede en el local, pero no en los colaterales.
 
 \end{document}
 
