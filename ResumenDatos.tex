@@ -1,0 +1,493 @@
+\documentclass[titlepage,a4paper]{article}
+
+\usepackage{a4wide}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksopen=true]{hyperref}
+\usepackage{bookmark}
+\usepackage{fancyhdr}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{float}
+
+\pagestyle{fancy} % Encabezado y pie de página
+\fancyhf{}
+\fancyhead[L]{...}
+\fancyhead[R]{...}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\begin{titlepage} % Carátula
+	\hfill\includegraphics[width=6cm]{logofiuba.jpg}
+    \centering
+    \vfill
+    \Huge \textbf{...}
+    \vskip2cm
+    \Large Resumen Organización de datos - Collinet\\
+    \vfill
+
+    \vfill
+    \vfill
+\end{titlepage}
+
+\tableofcontents % Índice general
+\newpage
+
+\section{Introducción}\label{sec:intro}
+
+
+\section{Clustering}
+
+Métodos de aprendizaje no supervisado. No se sabe que resultado esperar. Lo que hace es juntar los datos para ver como están relacionados.
+
+Su objetivo es encontrar grupos de instancias similares entre si. Depende mucho de la naturaleza de los datos.
+
+
+\subsection{K-Means}
+Algortimo que busca minimizar la ecuación de distorsión de clustering. Tengo los datos en $p$ dimensiones.
+
+\textbf{Algoritmo}
+\begin{enumerate}
+    \item Particionar los datos en k dimensiones. %%% revisar
+    \item Elegir k centroides.
+    \item Asignar cada instancia al centroide mas cercano.
+    \item Repetir 2 y 3
+\end{enumerate}
+
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item Simple
+    \item Eficiente
+    \item Escala muy bien
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Especificar K
+    \item Sensible a ruido
+    \item Muy sensible a la elección de centroides iniciales.
+    \item Solo encuentra clusters globales.
+\end{itemize}
+
+
+\subsection{Clustering Jerárquico Aglomerativo}
+\textbf{Notas}
+\begin{itemize}
+    \item Cada instancia comienza en un cluster distinto.
+    \item Cada instancia se va uniendo con el mas cercano.
+    \item Bottom up
+\end{itemize}
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item No tiene K
+    \item Se reproduce una representación jerárquica (Dendograma)
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item No busca optimizar una función
+    \item Sensible a ruido
+\end{itemize}
+
+\subsection{Clustering Jerárquico Divisivo}
+Similar al anterior en cuanto a procedimiento, solo que se comienza todo junto y se va dividiendo a medida que se va bajando.
+
+\subsection{DBSCAN}
+Se busca conseguir una mejora al ahorrar una cantidad de pasos en el algoritmo.
+
+\begin{itemize}
+    \item \textbf{CORE POINTS} Densidad alta
+    \item \textbf{BORDER POINTS} Vecinos de un core
+    \item \textbf{NOISE POINTS} Ninguno de los otros dos
+\end{itemize}
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item Robusto al ruido
+    \item Clusters de forma arbitraria
+    \item No tiene K
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Hay que elegir un $\epsilon$ y la cantidad mínima de puntos. Esto conlleva conocer los datos.
+    \item Costoso en casos de alta dimensionalidad
+    \item Funciona mal con datos de densidad variable
+\end{itemize}
+
+\subsection{HDBSCAN}
+Hereda del anterior. Es una mejora. Tiene un valor $\epsilon$ variable, densidad variable para evitar puntos que sean ruido, y mejora la velocidad.
+
+\subsection{Evaluación de clusters}
+
+\subsubsection{Matriz de similitud}
+
+\begin{itemize}
+    \item Cuadrada y simétrica.
+    \item Similitud entre cada par de instancias.
+    \item El resultado es bueno si la matriz es diagonal en bloques.
+    \item \textbf{Cohesión} Mide cuan relacionados están los elementos de un cluster
+    \item \textbf{Separación} Cuan lejos están los distintos clusters entre si % todo revisar def
+\end{itemize}
+
+\subsubsection{Coheficiente de Silhouette}
+Mientras mas cercano al centro, mas cercano a 1. Indica que tan bien definidos están los clusters.
+
+% todo imagen
+
+
+\subsubsection{Rand Index}
+
+Mide la similitud entre 2 resultados de clustering. Va de 0 a 1.
+
+% todo expandid, agregar cuenta y explicarla
+
+\subsection{Elbow Method}
+Método para encontrar el numero ideal de clusters. Se van graficando los resultados a medida que aumenta el K. Se termina eligiendo el numero a partir del cual no hay mejora.
+
+% todo imagen
+
+\section{Reducciones dimensionales}
+
+Son técnicas que sirven para cuando tenemos una alta dimensionalidad de los datos. Con ellas buscamos proyectar esos datos en un espacio de dimensión menor sin perder información. 
+
+Algunas reducciones posibles son:
+\begin{itemize}
+    \item Seleccionando variables
+    \item Transformando variables
+\end{itemize}
+
+\textbf{Por que hacerlo?}
+
+\begin{itemize}
+    \item Sirve para visualizar mejor el espacio
+    \item Puede ayudar a reducir el ruido
+    \item Regulariza los datos
+    \item Comprime la información
+    \item Reduce el computo de los modelos
+\end{itemize}
+
+\subsection{PCA}
+
+Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunto de proyecciones lineales ortogonales de \textit{X}, donde las proyecciones estén ordenadas de forma decreciente según su varianza.
+
+\textbf{Notas}
+\begin{itemize}
+
+\item La varianza es una medida que cuantifica la cantidad de información que se tiene.
+
+\item El resultado provoca una rotación o cambio del sistema de coordenadas.
+
+\item La dirección en que se maximiza es en la del autovector $\mu$ de $\sum$ (matriz de covarianza de los datos) cuyo autovalor $\lambda$ asociado es mayor.
+
+\item La reducción PCA es unica. Da siempre el mismo resultado. (Determinista)
+
+\item La proyección de X en $k$ dimensiones esta dado en la matriz $z = x * v$. Su reconstrucción es con $x = z * v^{t}$
+
+\item Si la varianza en v es menor a 1, se perdieron datos.
+
+\item \textit{Si todos los valores son iguales, (Var = 0) esa columna no aporta mucho}
+
+\end{itemize}
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item No tiene hiperparámetros
+    \item No tiene iteraciones
+    \item Sin óptimos locales.
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Limitado a proyecciones lineales.
+\end{itemize}
+
+%%% poner foto
+
+\subsection{MDS}
+
+Es un método que consiste en preservar la distancia entre los puntos. Intenta ubicarlos en una dimensión menor tal que la distancia se parezca lo mas posible.
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item Soporta varios tipos de distancia.
+    \item Permite transformaciones no lineales.
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Optimización iterativa con mínimos locales.
+    \item Difícil determinar que distancia usar.
+\end{itemize}
+
+
+\subsection{ISOMAP}
+
+Similar al anterior en cuanto a preservar la distancia. Se diferencia en que este busca preservar la geométrica utilizando distancia geodésica.
+
+\textbf{Algoritmo}
+\begin{enumerate}
+    \item Determinar vecinos mas cercanos.
+    \item Construir grafo.
+    \item Computar el camino mínimo (ej. Dijsktra).
+    %%% algo mas?
+\end{enumerate}
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item Mantiene la estructura.
+    \item Permite transformaciones no lineales.
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Determinar un k de vecinos.
+    \item Sensible a ruido.
+    \item Muchos vecinos puede hacer que se rompa la distancia geodésica y de algo mas como MDS.
+\end{itemize}
+
+
+\subsection{t-SNE}
+
+La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^{2}$. respetando lo mejor posible los puntos de $\mathbb{R}^{n}$. \textit{Ej. Conservar los grupos como estaban.}
+
+\textbf{Notas}
+\begin{itemize}
+    \item Se usan las distancias para construir una matriz de probabilidad de ser vecino. mientras mas grande, mas probable es que se este cerca.
+
+    \item Tiene un parámetro, \textit{perplexity}, que mientras mas grande mas vecino se es.
+    
+    \item Se utiliza el descenso del gradiente.
+    
+    \item No tiene sentido en \textit{Machine Learning}.
+\end{itemize}
+
+\textbf{Algoritmo}
+\begin{enumerate}
+    \item Iniciar los puntos al azar.
+    \item Matriz de probabilidad en X, Y.
+    \item Movemos los puntos de Y hasta que se parezcan lo mas posible.
+\end{enumerate}
+
+\textbf{Fortalezas}
+\begin{itemize}
+    \item Muy bueno para visualizar datos.
+\end{itemize}
+
+\textbf{Debilidades}
+\begin{itemize}
+    \item Es estocástico (al azar).
+    \item Escala en tiempo con dimensiones y puntos.
+    \item No sirve para nuevos puntos
+\end{itemize}
+
+\section{Aprendizaje supervisado}
+\subsection{Arboles de decisión}
+\begin{itemize}
+    \item Sencillo y fácil de comprender.
+    \item Sirven como \textit{baseline} trivial.
+    \item Sirven como ejemplo para entender la estructura y funcionamiento de otros algoritmos.
+    \item Cada nodo evalúa un atributo.
+    \item El nodo tiene tantos hijos como posibles atributos tenga.
+    \item Si las instancias estan lo suficientemente bien clasificadas termino (Se vuelven hojas).
+\end{itemize}
+
+\textbf{Cual es el mejor atributo?}
+Lo podemos medir con distintos indicadores.
+\begin{itemize}
+    \item \textbf{Pureza de Gini} Se elige el que mas reduce la impureza. %todo agregar cuenta y explicarla
+    \item \textbf{Ganancia de información} Se busca maximizar la ganancia. %idem, cuenta y explicar, entropia
+\end{itemize}
+
+%imagenes
+
+\textbf{Fortalezas}
+
+\begin{itemize}
+    \item Interpretabilidad
+    \item Similar a como decide el humano
+    \item Acepta varios tipos de input
+    \item Maneja bien  los missing values
+\end{itemize}
+
+\textbf{Debilidades}
+
+\begin{itemize}
+    \item Llegan a menos precisión
+    \item Varianza alta
+\end{itemize}
+
+\textbf{Overfitting}
+
+Sucede cuando se 'aprendió de memoria' los datos. En el caso de los arboles se puede ver cuando estos se vuelven muy profundos, esto puede llegar al caso de que en cada hoja haya incluso un solo dato. Como consecuencia de esto, el modelo generalizaría mal.
+
+Las soluciones en arboles son, parar a partir de cierta profundidad, o realizar una poda (Pruning)  (sacar ramas cuando mejore la performance). Otra opcion es Post-Pruning.
+
+\subsection{KNN}
+Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecinos.
+
+\begin{itemize}
+    \item Mientras mas cerca a un punto, mas peso deben de tener. Ponderar sobre la distancia.
+    \item Si se toman Ks mas grandes, se empieza a suavizar la variación.
+    \item Se rompe mientras mas dimensionalidad se tenga.
+    \item Es un modelo simple.
+    \item El entrenamiento es muy rápido, ya que consiste en agarrar los puntos y ver solamente.
+    \item La contraparte es que la consulta se vuelve lenta.
+    \item Tambien como funciona el modelo hace que se ocupe mucho espacio en disco.
+    \item Es suceptible a escalas.
+\end{itemize}
+
+%imagen
+
+
+\subsection{Naive Bayes}
+Este es un modelo que se basa en el calculo de probabilidades utilizando la teoría de probabilidad bayesiana. Asume que todos los sucesos son independientes para hacerlo.
+
+\begin{itemize}
+    \item Cuenta la cantidad de veces que aparece cierta característica básicamente.
+    \item Tiene de hiper-parámetro el smoothing (suavizado) que evita que haya casos con probabilidad 0.
+    \item No tiene en cuenta el orden. Si se quiere, se pueden utilizar n-gramas.
+    
+\end{itemize}
+
+%quizas meter algun ejemplo?
+
+\subsection{SVM}
+
+Modelo que busca que una recta/hiper-plano separe las clases de la mejor forma posible. Busca esto sin tener que modelar la distribución de los datos de cada clase.
+
+\begin{itemize}
+    \item Es iterativo, puede escalar en tiempo.
+    \item Va a converger, no hay óptimos locales.
+    \item Las instancias mas cercanas se vuelven 'Support Vectors'
+    \item De hiper-parámetro tiene M, que determina el margen, es decir, el espacio entre los distintos tipos de puntos. Busca el caso que maximice esto.
+    \item Si no encontró una recta/hiper-plano, los puntos no son linealmente separables.
+    \item Se consigue la recta creando una nueva dimensión. Como esto es costoso se puede utilizar Kernel Trick, que hace que se 'piense que esta en otra dimensión'.
+\end{itemize}
+
+\textbf{Hard Margin vs Soft Margin}
+
+En Hard Margin los puntos están perfectamente separados. Esto hace que el modelo no funciones con outliers y ruido.
+
+En Soft Margin se permite algo de ruido y outliers.
+
+Este hiper-parámetro se controla con el C. A mayor C sae tiene HM, a menor SM.
+
+% meter la cuenta?
+
+% agregar imagen
+
+\section{Evaluación y selección}
+
+La idea es evaluar sobre datos que no se hayan usado en el entrenamiento. Para ello, nos guardamos una parte de los mismos para usarlos mas adelante. (10\% a 25\%)
+
+También se cuenta con una parte que se conoce como holdout, que es para evaluar cuando el modelo esta por salir a producción.
+
+Algo a tener en cuenta, es evitar los \textit{data leaks}, esto sucede cuando parte de lo que tenes en tu parte de entrenamiento aparece en la de evaluación.
+
+\subsection{Como hacer el particionado?}
+
+El particionado tiene que ser random. No debe de agarrar las primeras x instancias y listo. Se le puede pedir cuando se esta partiendo que respete la distribución de las clases. Muy útil para cuando se tienen casos muy des-balanceados. \textit{Ej. Clase positivo es el 10\% y el resto negativo.}
+
+%imagen 
+
+\subsection{Crossvalidation K-Fold}
+
+Consiste en dividir varias veces los datos, e ir cambiando el conjunto. Esto hace que se disminuya el riesgo de tener una mala partición.
+
+\textbf{Algoritmo}
+\begin{enumerate}
+    \item Desordenar los datos
+    \item Separar en k folds del mismo tamaño
+    \item De $i = 1,..k$, entrenar con todos menos $i$. Después evaluar con $i$  
+\end{enumerate}
+
+\textit{Nota: Stratified K-fold mantiene las proporciones.}
+%imagen 
+
+\subsection{Grid Search}
+
+Es un método con el cual se buscan los mejores hiper-parámetros de cada modelo. Escala mucho en tiempo si no se paraleliza, esto se debe a que el algoritmo consiste en ir agregando \textit{for} por cada hiper-parámetro. Una alternativa es ir eligiendo aleatoriamente (Random Search).
+
+%imagen o sistema generico
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Accuracy: Evalúa directamente a cuantos le pegamos.
+    \item Matriz de confusión: Ver imagen ... %agregar ref
+    \item Precision: No le interesa si perdemos alguno, quiere saber a cuantos le pegamos de los que decimos que son. 
+    \item Recall: Nos importa la mayor cantidad de casos que predecimos reales.
+    \item F1-Score: Permite tener un único numero para evaluar un modelo.
+    \item Curva ROC: Es un gráfico que me dice de forma visual que tan buen modelo tengo. Ver imagen %ref
+    \item AUC-ROC: Valor que surge de medir el área bajo la curva ROC.
+    \item Hay otros como True Positivity Rate o el True Negative Rate.
+\end{itemize}
+
+%imagenes
+
+\begin{equation}
+    Precision = \frac{TP}{TP+FP}
+\end{equation}
+
+
+\begin{equation}
+    Recall = \frac{TP}{TP+FN}
+\end{equation}
+
+\begin{equation}
+    F1-Score = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
+\end{equation}
+
+
+
+
+Para encontrar la mejor combinación, hay que explorar el espacio de posibles combinaciones, usando idealmente \textit{K-fold} para medir el desempeño.
+
+
+
+\section{Regresiones}
+
+
+
+\section{Ensambles}
+
+Un ensamble es una unión de muchos modelos juntos haciendo predicciones sobre un problema. Cada modelo ajustaría de forma distinta, agarrando una parte del concepto que se busca. Esto causa que se tenga un bajo sesgo y se reduzca la varianza.
+
+%imagen pag 63 cuaderno
+
+\subsection{Bagging}
+
+%imagen
+
+La tasa de error reduce con el numero de clasificadores. Mientras mas tenga mas me voy a estar acercando al concepto.
+
+\subsection{Random Forest}
+
+\begin{itemize}
+    \item Igual a bagging, pero en cada nodo solo hay un subconjunto de atributos.
+    \item Es bueno para selección de features.
+    \item Al aumentar la cantidad de arboles no aumenta el overfitting.
+\end{itemize}
+%imagen
+
+
+\subsection{Boosting}
+\begin{itemize}
+    \item El sesgo baja en este caso, cada modelo mira mas los datos.
+    \item Se comienza con un modelo simple entrenado sobre todos los datos.
+    \item En cada iteración se entrena dando mayor importancia a los datos mal clasificados por las iteraciones anteriores.
+    \item Puede sobre ajustar.
+    \item Algunas implementaciones son AdaBoost, GradientBoost, XGBoost.
+\end{itemize}
+
+\subsection{Hibidridos}
+\subsubsection{Voting}
+\subsubsection{Stacking}
+\subsubsection{Cascading}
+
+\end{document}
+
