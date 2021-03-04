@@ -12,22 +12,25 @@
 
 \pagestyle{fancy} % Encabezado y pie de página
 \fancyhf{}
-\fancyhead[L]{...}
-\fancyhead[R]{...}
+\fancyhead[L]{Resumen}
+\fancyhead[R]{Organización de datos - FIUBA}
 \renewcommand{\headrulewidth}{0.4pt}
 \fancyfoot[C]{\thepage}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
 \begin{titlepage} % Carátula
-	\hfill\includegraphics[width=6cm]{logofiuba.jpg}
+	\hfill\includegraphics[width=6cm]{imagenesResumen/logofiuba.jpg}
     \centering
     \vfill
-    \Huge \textbf{...}
+    \Huge \textbf{Resumen Datos}
     \vskip2cm
-    \Large Resumen Organización de datos - Collinet\\
+    \Large Organización de datos, Curso Collinet - FIUBA\\
     \vfill
-
+    \begin{tabular}{ | l | l | }
+      \hline
+       Grassano, Bruno &  bgrassano@fi.uba.ar \\ \hline
+  	\end{tabular}
     \vfill
     \vfill
 \end{titlepage}
@@ -38,6 +41,21 @@
 \section{Introducción}\label{sec:intro}
 
 
+\subsection{Cosas a tener en cuenta}
+
+
+\subsection{Recomendaciones}
+
+
+\section{Análisis Exploratorio}
+
+\subsection{Feature Engineering}
+
+
+\subsection{Visualización}
+
+
+
 \section{Clustering}
 
 Métodos de aprendizaje no supervisado. No se sabe que resultado esperar. Lo que hace es juntar los datos para ver como están relacionados.
@@ -46,7 +64,7 @@ Su objetivo es encontrar grupos de instancias similares entre si. Depende mucho 
 
 
 \subsection{K-Means}
-Algortimo que busca minimizar la ecuación de distorsión de clustering. Tengo los datos en $p$ dimensiones.
+Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo los datos en $p$ dimensiones.
 
 \textbf{Algoritmo}
 \begin{enumerate}
@@ -325,7 +343,7 @@ Lo podemos medir con distintos indicadores.
 
 Sucede cuando se 'aprendió de memoria' los datos. En el caso de los arboles se puede ver cuando estos se vuelven muy profundos, esto puede llegar al caso de que en cada hoja haya incluso un solo dato. Como consecuencia de esto, el modelo generalizaría mal.
 
-Las soluciones en arboles son, parar a partir de cierta profundidad, o realizar una poda (Pruning)  (sacar ramas cuando mejore la performance). Otra opcion es Post-Pruning.
+Las soluciones en arboles son, parar a partir de cierta profundidad, o realizar una poda (Pruning)  (sacar ramas cuando mejore la performance). Otra opción es Post-Pruning.
 
 \subsection{KNN}
 Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecinos.
@@ -338,7 +356,7 @@ Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecino
     \item El entrenamiento es muy rápido, ya que consiste en agarrar los puntos y ver solamente.
     \item La contraparte es que la consulta se vuelve lenta.
     \item Tambien como funciona el modelo hace que se ocupe mucho espacio en disco.
-    \item Es suceptible a escalas.
+    \item Es susceptible a escalas.
 \end{itemize}
 
 %imagen
@@ -389,7 +407,7 @@ También se cuenta con una parte que se conoce como holdout, que es para evaluar
 
 Algo a tener en cuenta, es evitar los \textit{data leaks}, esto sucede cuando parte de lo que tenes en tu parte de entrenamiento aparece en la de evaluación.
 
-\subsection{Como hacer el particionado?}
+\subsection{¿Como hacer el particionado?}
 
 El particionado tiene que ser random. No debe de agarrar las primeras x instancias y listo. Se le puede pedir cuando se esta partiendo que respete la distribución de las clases. Muy útil para cuando se tienen casos muy des-balanceados. \textit{Ej. Clase positivo es el 10\% y el resto negativo.}
 
@@ -448,11 +466,6 @@ Es un método con el cual se buscan los mejores hiper-parámetros de cada modelo
 Para encontrar la mejor combinación, hay que explorar el espacio de posibles combinaciones, usando idealmente \textit{K-fold} para medir el desempeño.
 
 
-
-\section{Regresiones}
-
-
-
 \section{Ensambles}
 
 Un ensamble es una unión de muchos modelos juntos haciendo predicciones sobre un problema. Cada modelo ajustaría de forma distinta, agarrando una parte del concepto que se busca. Esto causa que se tenga un bajo sesgo y se reduzca la varianza.
@@ -484,10 +497,156 @@ La tasa de error reduce con el numero de clasificadores. Mientras mas tenga mas 
     \item Algunas implementaciones son AdaBoost, GradientBoost, XGBoost.
 \end{itemize}
 
-\subsection{Hibidridos}
+\subsection{Híbridos}
 \subsubsection{Voting}
+Consiste en construir N modelos usando los mismos datos, y luego tomar la predicción mayoritaria.
+
+%imagen
+
 \subsubsection{Stacking}
+Entrenar distintos modelos base, y uno mas que al final recibe las predicciones realizadas. Este ensamble es una mejora del método de votación.
+%imagen
+
 \subsubsection{Cascading}
+En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa tendría un solo modelo, el cual se entrenaría sobre las instancias con baja certeza del modelo anterior.
+%imagen
+\textit{Nota: Cascadas muy profundas pueden producir overfitting.}
+
+\section{Regresiones}
+
+Cada instancia tiene un valor numérico, se quieren predecir una o mas respuestas a partir de varios atributos. Para evaluarlo tenemos un rango de incerteza.
+
+\textbf{Error cuadrático medio}
+\begin{equation}
+    MSE = \frac{1}{n} \sum^{n} (y^{i}-\hat{y}^{i})^{2}
+\end{equation}
+
+\subsection{Arboles de regresión}
+\begin{itemize}
+    \item En cada nodo usar reducción del desvío estándar.
+    \item Al llegar a una hoja se devuelve el promedio de las Y sobre las instancias que tenga.
+\end{itemize}
+
+%imagen
+
+\subsection{KNN de regresión}
+Dada una instancia, se devuelve el promedio ponderado de los valores de sus vecinos. (Z)
+
+%imagen
+
+\subsection{Regresión lineal}
+Se supone una relación lineal con una variable y se procede en la cuenta. Cuadrados mínimos es una variante.
+
+\begin{equation}
+    y \approx \beta_0 + \beta_1 X_1 + ... + \beta_p X_p
+\end{equation}
+
+Para estimar los coeficientes, se igualan a 0 las derivadas. Si algún coeficiente da 0, significa que esa feature no tiene importancia para lo que se quiere predecir.
+
+Si hay error, existe la posibilidad de que sea debido a que la relación no es lineal.
+
+\textbf{Residual Sum of Squares}
+
+\begin{equation}
+    RSS = \sum^{n} (y^{i}-\hat{y}^{i})^{2}
+\end{equation}
+
+
+\subsection{Residual Plot}
+
+Forma de observar los residuos que nos da el modelo. Si da algo que no es razonable, dudar de que sea lineal. El gráfico nos tiene que dar una nube de puntos. No se tienen que ver relaciones.
+
+%imagenes.
+
+
+\subsection{Regularización}
+\begin{itemize}
+    \item Técnica para evitar el overfitting.
+    \item Busca hacer mas homogéneos los modelos.
+    \item Reduce varianza pero aumenta el sesgo de los estimadores.
+    \item Hay que estandarizar las variables.
+\end{itemize}
+
+\begin{equation}
+    Z = \frac{X_i - \mu}{\sigma}
+\end{equation}
+
+\textbf{Causas de overfitting}
+\begin{itemize}
+    \item Features irrelevantes: No tienen relacion con el target. \textit{Tener cuidado cuando el numero de caracteristicas esta cerca del de observaciones.}
+    \item Features correlacionados: El modelo se hace asumiendo independencia.
+    \item Coeficientes muy grandes: A mayor valor absoluto, mas puede cambiar la respuesta prevista.
+\end{itemize}
+
+Debido a estos problemas, se busca restringir a los coeficientes. Se consigue modificando la función de perdida.
+
+\begin{equation}
+    RSS = \sum^{n} (y^{i}-\hat{y}^{i})^{2} + \lambda \sum^{M} |\hat{\beta}_j|^{q}
+\end{equation}
+
+\subsubsection{Ridge}
+Se tiene cuando q = 2. Hace que el sesgo crezca y la varianza baje a medida que se aumente $\lambda$.
+
+\textbf{Teorema}: Siempre existe un valor de $\lambda$ tal que el MSE de Ridge sea menor que el MSE de mínimos cuadrados.
+
+\subsubsection{Lasso}
+Es el caso en que q = 1. Esta regularización puede llegar a anular coeficientes, por lo que puede usarse como selección de variables.
+
+\subsubsection{Elastic Net}
+Es una combinación de Lasso y Ridge. Agrega ambos términos a la cuenta, haciendo que cada uno aporte lo valioso que tiene.
+
+\subsection{Robustez}
+\textbf{Outlier}
+\begin{itemize}
+    \item Observación que se desvía tanto de las otras observaciones como para levantar sospechas de que fue generada por otro mecanismo.
+    \item En algunos casos nos puede interesar encontrarlo. \textit{Ej. Robo de tarjeta de crédito}
+    \item En otros casos es simplemente molesto.
+\end{itemize}
+
+%imagen
+
+Para agregarlo hay que cambiar la función de perdida.
+
+\subsubsection{L1}
+Remover el cuadrado y usar directamente el modulo. Lo malo de este caso es que no es bueno para derivarla.
+
+\subsubsection{M estimadores}
+\begin{equation}
+    \hat{\beta} = arg min_\beta \sum^{n} \rho(\frac{ y_{i}-\beta_0-\sum^{p}\beta_j \cdot X_{ij}}{\hat{\sigma}})
+\end{equation}
+
+Para $\rho$ se usan distintas funciones. \textit{Ej. Cuadratica, Huber, Bicuadrada}
+
+Para $\beta$ se deriva nuestra función de perdida y se ve que $\beta$ la igualan a 0.
+
+Esto hace que los outliers tengan poca influencia en el modelo.
+
+%imagen de la recta y de las funciones
+
+\subsubsection{RANSAC}
+Forma mas algorítmica. Se seleccionan n valores random, se hace un ajuste de regresión con esos valores, y con esto se evalúa cuales puntos restantes pueden pertenecer. Este algoritmo es iterativo, sirve mucho para cuando hay muchos outliers o ruido.
+
+%imagen
+
+\subsubsection{THEIL-SEN}
+Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me quedo con esa. Es 'insensitivo' a outliers. No depende de hiper-parámetros.
+
+
+\section{Redes Neuronales}
+
+
+\section{PLN : Procesamiento del Lenguaje Natural}
+
+
+\section{Redes Convolucionales}
+
+
+\section{Redes Sociales}
+
+
+\section{Aprendizaje por refuerzo}
+
+\section{Ética y moral en ML}
 
 \end{document}
 
