@@ -10,6 +10,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 
+\usepackage{minted} 
+
 \pagestyle{fancy} % Encabezado y pie de página
 \fancyhf{}
 \fancyhead[L]{Resumen}
@@ -212,22 +214,36 @@ Hereda del anterior. Es una mejora. Tiene un valor $\epsilon$ variable, densidad
     \item \textbf{Separación} Cuan lejos están los distintos clusters entre si % todo revisar def
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/MatrizSimilitud.jpg}
+    \caption{A la derecha se puede ver la matriz de similitud. Notar que es diagonal en bloques y los clusters estan bien clasificados.}
+\end{figure}
+
 \subsubsection{Coheficiente de Silhouette}
 Mientras mas cercano al centro, mas cercano a 1. Indica que tan bien definidos están los clusters.
 
-% todo imagen
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/SilhouetteCoef.png}
+    \caption{Grafico mostrando el avance con este coeficiente}
+\end{figure}
 
 \subsubsection{Rand Index}
 
 Mide la similitud entre 2 resultados de clustering. Va de 0 a 1.
 
-% todo expandid, agregar cuenta y explicarla
+% todo expandir, agregar cuenta y explicarla
 
 \subsection{Elbow Method}
 Método para encontrar el numero ideal de clusters. Se van graficando los resultados a medida que aumenta el K. Se termina eligiendo el numero a partir del cual no hay mejora.
 
-% todo imagen
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/ElbowMethod.png}
+    \caption{Método de Elbow. Se puede ver como a partir de 3 no hay una gran mejora.}
+\end{figure}
 
 \section{Reducciones dimensionales}
 
@@ -284,7 +300,13 @@ Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunt
     \item Limitado a proyecciones lineales.
 \end{itemize}
 
-%%% poner foto
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/PCA.jpeg}
+    \caption{Conversión utilizando PCA}
+\end{figure}
+
+Gif mostrando la conversión \href{https://miro.medium.com/max/1556/1*T7CqlFV5aRm6MxO5nJt7Qw.gif}{aquí}.
 
 \subsection{MDS}
 
@@ -331,7 +353,7 @@ Similar al anterior en cuanto a preservar la distancia. Se diferencia en que est
 
 \subsection{t-SNE}
 
-La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^{2}$. respetando lo mejor posible los puntos de $\mathbb{R}^{n}$. \textit{Ej. Conservar los grupos como estaban.}
+La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^{2}$ respetando lo mejor posible los puntos de $\mathbb{R}^{n}$. \textit{Ej. Conservar los grupos como estaban.}
 
 \subsubsection*{Notas}
 \begin{itemize}
@@ -491,21 +513,42 @@ Consiste en dividir varias veces los datos, e ir cambiando el conjunto. Esto hac
 
 Es un método con el cual se buscan los mejores hiper-parámetros de cada modelo. Escala mucho en tiempo si no se paraleliza, esto se debe a que el algoritmo consiste en ir agregando \textit{for} por cada hiper-parámetro. Una alternativa es ir eligiendo aleatoriamente (Random Search).
 
-%imagen o sistema generico
+\begin{minted}{python}
+best_score = None
+best_hiperparams = None
+for h1 in valores_hiperparametro_1:
+    for h2 in valores_hiperparametro_2:
+          ...
+          for hn in valores_hiperparametro_n:
+              kf = StratifiedKFold(n_splits=5)
+              metrics = []
+              for fold_idx, (train_index, test_index) in enumerate(kf.split(X, y)):
+                  clf = Clasificador(h1, h2, ..., hn)
+                  clf.fit(X[train_index], y[train_index])
+                  metrics.append(metric(y[test_index], clf.predict(X[test_index])))
+              if not best_score or np.mean(metrics) < best_score:
+                  best_score = np.mean(metrics)
+                  best_hiperparams = [h1, h2, ..., hn]
+\end{minted}
+\begin{center}
+   \textit{Código genérico de grid search en Python.}
+\end{center}
+
+
+
+
 
 \subsection{Métricas}
 \begin{itemize}
     \item Accuracy: Evalúa directamente a cuantos le pegamos.
-    \item Matriz de confusión: Ver imagen ... %agregar ref
+    \item Matriz de confusión: Ver imagen \ref{MatrizDeConfusion}
     \item Precision: No le interesa si perdemos alguno, quiere saber a cuantos le pegamos de los que decimos que son. 
     \item Recall: Nos importa la mayor cantidad de casos que predecimos reales.
     \item F1-Score: Permite tener un único numero para evaluar un modelo.
-    \item Curva ROC: Es un gráfico que me dice de forma visual que tan buen modelo tengo. Ver imagen %ref
+    \item Curva ROC: Es un gráfico que me dice de forma visual que tan buen modelo tengo. Ver imagen \ref{ROCCurve}
     \item AUC-ROC: Valor que surge de medir el área bajo la curva ROC.
     \item Hay otros como True Positivity Rate o el True Negative Rate.
 \end{itemize}
-
-%imagenes
 
 \begin{equation}
     Precision = \frac{TP}{TP+FP}
@@ -520,6 +563,19 @@ Es un método con el cual se buscan los mejores hiper-parámetros de cada modelo
     F1-Score = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
 \end{equation}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{imagenesResumen/MatrizDeConfusion.png}
+    \caption{Matriz de confusión}
+    \label{MatrizDeConfusion}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/ROCCurve.png}
+    \caption{Gráfico mostrando posibles casos de ROC Curve}
+    \label{ROCCurve}
+\end{figure}
 
 
 
@@ -702,7 +758,86 @@ Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me q
 
 
 \section{Redes Sociales}
+\begin{itemize}
+    \item Tienen un crecimiento exponencial.
+    \item Son importantes.
+    \item Ubicuas.
+    \item Modelan distintas cosas.
+    \item Crecientes, siempre estuvieron. A partir de la globalización fue exponencial.
+    \item Creció la capacidad de mapearlas y estudiarlas.
+\end{itemize}
 
+\subsection{¿En cuales participamos?}
+\begin{itemize}
+    \item Sociales
+    \begin{itemize}
+        \item Reales: Familia, amigos, trabajo...
+        \item Virtuales: Twitter, Facebook,...
+    \end{itemize}
+    \item Tecnológicas: Internet
+    \item De información: www.
+    \item De transporte, comercio...
+    \item Neuronas
+\end{itemize}
+
+\subsection{¿Que modelamos?}
+\begin{itemize}
+    \item Conectividad
+    \item Comportamiento, interacciones
+    \item Evolución
+\end{itemize}
+
+\subsection{¿Quienes se ocupan?}
+Tienen distintas escalas, distintas visiones
+\begin{itemize}
+    \item Estructura, complejidad, sistemas conectados $\Longleftrightarrow$ Computación, matemática, física
+    \item Estratégico $\Longleftrightarrow$ Economía, psicología
+    \item Grupales, agregado $\Longleftrightarrow$ Sociología
+    \item Sistemas gigantes, Big data $\Longleftrightarrow$ Computación
+\end{itemize}
+
+Cada uno tiene sus teorías subyacentes, de grafos, juegos, y redes.
+
+\subsection{Análisis de las redes sociales}
+\begin{itemize}
+    \item Diferencias entre amigos y conocidos. \textit{Ej. Cambio de trabajo. Mas probable que venga de conocidos. Actúan como puentes entre grupos}
+    \item Principio de clausura triadica.
+    \item Mundo pequeño: 6 niveles de separación. \textit{Ej. Carta a Boston}.
+\end{itemize}
+
+\subsection*{Puente}
+\begin{itemize}
+    \item Eje cuya eliminación desconecta un grafo.
+    \item En los mundos pequeños (grafos muy conexos) son poco comunes.
+\end{itemize}
+
+\subsubsection*{Puentes Locales}
+Su eliminación no desconecta al grafo, pero aumenta el recorrido.
+
+\subsection*{Homofilia}
+\begin{itemize}
+    \item Los nodos conectados tienden a ser parecidos.
+    \item \textit{Ej. Amigos con gustos parecidos}.
+    \item 'Te metes en la burbuja'.
+    \item Existe la homofilia inversa.
+    \item Se puede medir al comparar cuanto se parecen los ejes de los grafos.
+\end{itemize}
+
+\subsection*{Relaciones +/-}
+\begin{itemize}
+    \item Amigo o enemigo
+    \item Existen 4 tipos de triángulos. Ver la imagen \ref{triangulos}
+\end{itemize}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imagenesResumen/Triangulos.png}
+    \caption{Los 4 tipos de triángulos posibles. Los + representan a los 'amigos' y los - a los 'enemigos'.}
+    \label{triangulos}
+\end{figure}
+
+
+Hay un balanceo estructural si todos los triángulos de una estructura son estables. Caso contrario se tiende a romper y generar problemas.
 
 \section{Aprendizaje por refuerzo}
 \textit{
@@ -743,19 +878,19 @@ Este algoritmo (Q-Learning) tiene los problemas de que no aprende la noción de 
 \begin{itemize}
     \item Optimista
     \begin{itemize}
-        \item No confinar o intentar controlar a la IA
+        \item No confinar o intentar controlar a la IA.
         \item Enseñarle los valores humanos.
-        \item Hay que tener un planteo simbiotico.
+        \item Hay que tener un planteo simbiótico.
     \end{itemize}
     \item Pesimista
         \begin{itemize}
-        \item .%completar
+        \item Que nos va a pasar y atentar contra nosotros.
     \end{itemize}
     \item Realistas
         \begin{itemize}
-        \item Es falso el desarrollo exponencial de la IA
-        \item Es falso que constituyen un peligro
-        \item Los progresos son lineales
+        \item Es falso el desarrollo exponencial de la IA.
+        \item Es falso que constituyen un peligro.
+        \item Los progresos son lineales.
     \end{itemize}
 \end{itemize}
 
