@@ -48,11 +48,71 @@
 
 
 \section{Análisis Exploratorio}
+Es un enfoque que comprende un conjunto de tareas para analizar conjuntos de datos, de forma tal de encontrar sus principales características.
+
+Se comienza siempre formulando una pregunta interesante, se reúnen los datos, y se desarrolla el proceso necesario para poder responderla.
 
 \subsection{Feature Engineering}
+Forma a través de la cual se van tratando los datos. Comprende conversiones de tipos, missings, selección, creación de nuevas variables a partir de las que ya tenemos y reducciones dimensionales.
 
+\begin{center}
+    \textit{Good features allow a simple model to beat a complex model.}
+    
+    \textit{Peter Norving}
+\end{center}
+
+\subsubsection{Conversión}
+Los modelos entienden números, por lo que es necesario convertir los atributos a variables numéricas.
+
+
+
+\subsubsection*{Variables categóricas}
+\begin{itemize}
+    \item One Hot Encoding: Por cada variable categórica crea una binaria. Tener cuidado con el problema de la colinealidad. Solución, crear para todos menos una la variable binaria. La ausencia de todas significa que se esta en presencia de la no codificada.
+    \item Bin Counting Scheme: Convierte los valores categóricos en probabilidades. Útil para cuando se tiene muchas categorías.
+    \item Hashing Trick: Mapea de un dominio muchísimo mayor a uno mas acotado. Muy bueno también para cuando se tienen muchas categorías. Se utiliza una funcion hash para conseguirlo.
+\end{itemize}
+
+Si se quiere conservar algun orden en particular, se puede utilizar Ordinal Encoder. Tener cuidado de que no se de el caso de agregar un orden donde no corresponda. \textit{Ej. Azul < Rojo}
+
+
+\subsubsection{Missing values}
+\subsubsection*{Missing completely at random}
+En este caso la probabilidad de que un valor sea missing es la misma para todas las instancias. En este caso no depende de las medidas de otras variables. No tiene sentido intentar adivinar este caso. \textit{Ej. Respuesta de una encuesta}
+
+\subsubsection*{Missing at random}
+La probabilidad de missing depende de información que si tengo. \textit{Ej. Edad relacionado con si una persona vive. Si no vive, y no tengo cargado el valor de edad ahí esta relacionado.}
+
+\subsubsection*{Missing not at random}
+La probabilidad de missing esta relacionada con los valores perdidos. \textit{Ej. La edad quizás prefieren no decirla, o el sueldo si es alto también.}
+
+\subsubsection*{Soluciones}
+\begin{itemize}
+    \item Utilizar algoritmos que acepten datos faltantes.
+    \item Eliminar los datos con problemas. ¿Filas? ¿Columnas? ¿Esta bien borrarlo? Depende siempre del caso.
+    \item Convertir el valor faltante en una categoría. \textit{Ej. No responde}.
+    \item Rellenar el valor faltante con algún criterio. \textit{Ej. Media, mediana, moda, etc} En estos casos puede convenir agregar una columna indicadora de que ese valor fue rellenado. Esto puede hacer que se le asigne menos peso al momento de mirarlo.
+\end{itemize}
+
+\subsubsection{Selección}
+Esto busca reducir la dimensión mediante la eliminación de variables poco útiles. Favorece a la generalización y puede acelerar la velocidad del modelo mientras que mejora su interpretabilidad.
+
+\subsubsection*{Técnicas}
+\begin{itemize}
+    \item Filter: Se realiza un ranking de cada variable generado a través de algún método estadístico. Se busca encontrar que variable afecta mas el valor a predecir.
+    \item Wrapper: Encapsula la funcionalidad. Trata al problema de selección como una busqueda, ya que trata de conseguir la mejor combinación de variables. (Alto tiempo de computo). Tiene forward selection, backward selection, y random selection. Se puede utilizar también cualquier método que trabaje con problemas de combinatoria. \textit{Ej Forward: Selecciono 1 al azar. Selecciono 2, ¿Mejoro?, selecciono mas y sigo preguntando.}
+    \item Embedded: Rankea las variables segun métodos internos de cada algoritmo. Busca determinar cual es mas importante para predecir. \textit{Ej. Lasso, Ridge, Elastic Net}. Ver \ref{regularizaciones}
+\end{itemize}
 
 \subsection{Visualización}
+\begin{itemize}
+    \item Para entender el trabajo y comunicarlo.
+    \item Entender de forma mas rápida y eficiente.
+    \item Comunicarlo de forma concisa y clara.
+    \item Permite encontrar patrones y relaciones.
+    \item Existe una amplia variedad de tipos de gráficos, cada uno con su objetivo.
+\end{itemize}
+
 
 
 
@@ -66,7 +126,7 @@ Su objetivo es encontrar grupos de instancias similares entre si. Depende mucho 
 \subsection{K-Means}
 Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo los datos en $p$ dimensiones.
 
-\textbf{Algoritmo}
+\subsubsection*{Algoritmo}
 \begin{enumerate}
     \item Particionar los datos en k dimensiones. %%% revisar
     \item Elegir k centroides.
@@ -75,14 +135,14 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
 \end{enumerate}
 
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item Simple
     \item Eficiente
     \item Escala muy bien
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Especificar K
     \item Sensible a ruido
@@ -92,20 +152,20 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
 
 
 \subsection{Clustering Jerárquico Aglomerativo}
-\textbf{Notas}
+\subsubsection*{Notas}
 \begin{itemize}
     \item Cada instancia comienza en un cluster distinto.
     \item Cada instancia se va uniendo con el mas cercano.
     \item Bottom up
 \end{itemize}
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item No tiene K
     \item Se reproduce una representación jerárquica (Dendograma)
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item No busca optimizar una función
     \item Sensible a ruido
@@ -123,14 +183,14 @@ Se busca conseguir una mejora al ahorrar una cantidad de pasos en el algoritmo.
     \item \textbf{NOISE POINTS} Ninguno de los otros dos
 \end{itemize}
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item Robusto al ruido
     \item Clusters de forma arbitraria
     \item No tiene K
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Hay que elegir un $\epsilon$ y la cantidad mínima de puntos. Esto conlleva conocer los datos.
     \item Costoso en casos de alta dimensionalidad
@@ -179,7 +239,7 @@ Algunas reducciones posibles son:
     \item Transformando variables
 \end{itemize}
 
-\textbf{Por que hacerlo?}
+\subsubsection*{¿Por que hacerlo?}
 
 \begin{itemize}
     \item Sirve para visualizar mejor el espacio
@@ -193,7 +253,7 @@ Algunas reducciones posibles son:
 
 Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunto de proyecciones lineales ortogonales de \textit{X}, donde las proyecciones estén ordenadas de forma decreciente según su varianza.
 
-\textbf{Notas}
+\subsubsection*{Notas}
 \begin{itemize}
 
 \item La varianza es una medida que cuantifica la cantidad de información que se tiene.
@@ -212,14 +272,14 @@ Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunt
 
 \end{itemize}
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item No tiene hiperparámetros
     \item No tiene iteraciones
     \item Sin óptimos locales.
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Limitado a proyecciones lineales.
 \end{itemize}
@@ -230,13 +290,13 @@ Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunt
 
 Es un método que consiste en preservar la distancia entre los puntos. Intenta ubicarlos en una dimensión menor tal que la distancia se parezca lo mas posible.
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item Soporta varios tipos de distancia.
     \item Permite transformaciones no lineales.
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Optimización iterativa con mínimos locales.
     \item Difícil determinar que distancia usar.
@@ -247,7 +307,7 @@ Es un método que consiste en preservar la distancia entre los puntos. Intenta u
 
 Similar al anterior en cuanto a preservar la distancia. Se diferencia en que este busca preservar la geométrica utilizando distancia geodésica.
 
-\textbf{Algoritmo}
+\subsubsection*{Algoritmo}
 \begin{enumerate}
     \item Determinar vecinos mas cercanos.
     \item Construir grafo.
@@ -255,13 +315,13 @@ Similar al anterior en cuanto a preservar la distancia. Se diferencia en que est
     %%% algo mas?
 \end{enumerate}
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item Mantiene la estructura.
     \item Permite transformaciones no lineales.
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Determinar un k de vecinos.
     \item Sensible a ruido.
@@ -273,7 +333,7 @@ Similar al anterior en cuanto a preservar la distancia. Se diferencia en que est
 
 La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^{2}$. respetando lo mejor posible los puntos de $\mathbb{R}^{n}$. \textit{Ej. Conservar los grupos como estaban.}
 
-\textbf{Notas}
+\subsubsection*{Notas}
 \begin{itemize}
     \item Se usan las distancias para construir una matriz de probabilidad de ser vecino. mientras mas grande, mas probable es que se este cerca.
 
@@ -284,19 +344,19 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
     \item No tiene sentido en \textit{Machine Learning}.
 \end{itemize}
 
-\textbf{Algoritmo}
+\subsubsection*{Algoritmo}
 \begin{enumerate}
     \item Iniciar los puntos al azar.
     \item Matriz de probabilidad en X, Y.
     \item Movemos los puntos de Y hasta que se parezcan lo mas posible.
 \end{enumerate}
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 \begin{itemize}
     \item Muy bueno para visualizar datos.
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 \begin{itemize}
     \item Es estocástico (al azar).
     \item Escala en tiempo con dimensiones y puntos.
@@ -314,7 +374,7 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
     \item Si las instancias estan lo suficientemente bien clasificadas termino (Se vuelven hojas).
 \end{itemize}
 
-\textbf{Cual es el mejor atributo?}
+\subsubsection*{¿Cual es el mejor atributo?}
 Lo podemos medir con distintos indicadores.
 \begin{itemize}
     \item \textbf{Pureza de Gini} Se elige el que mas reduce la impureza. %todo agregar cuenta y explicarla
@@ -323,7 +383,7 @@ Lo podemos medir con distintos indicadores.
 
 %imagenes
 
-\textbf{Fortalezas}
+\subsubsection*{Fortalezas}
 
 \begin{itemize}
     \item Interpretabilidad
@@ -332,14 +392,14 @@ Lo podemos medir con distintos indicadores.
     \item Maneja bien  los missing values
 \end{itemize}
 
-\textbf{Debilidades}
+\subsubsection*{Debilidades}
 
 \begin{itemize}
     \item Llegan a menos precisión
     \item Varianza alta
 \end{itemize}
 
-\textbf{Overfitting}
+\subsubsection*{Overfitting}
 
 Sucede cuando se 'aprendió de memoria' los datos. En el caso de los arboles se puede ver cuando estos se vuelven muy profundos, esto puede llegar al caso de que en cada hoja haya incluso un solo dato. Como consecuencia de esto, el modelo generalizaría mal.
 
@@ -387,7 +447,7 @@ Modelo que busca que una recta/hiper-plano separe las clases de la mejor forma p
     \item Se consigue la recta creando una nueva dimensión. Como esto es costoso se puede utilizar Kernel Trick, que hace que se 'piense que esta en otra dimensión'.
 \end{itemize}
 
-\textbf{Hard Margin vs Soft Margin}
+\subsubsection*{Hard Margin vs Soft Margin}
 
 En Hard Margin los puntos están perfectamente separados. Esto hace que el modelo no funciones con outliers y ruido.
 
@@ -417,7 +477,7 @@ El particionado tiene que ser random. No debe de agarrar las primeras x instanci
 
 Consiste en dividir varias veces los datos, e ir cambiando el conjunto. Esto hace que se disminuya el riesgo de tener una mala partición.
 
-\textbf{Algoritmo}
+\subsubsection*{Algoritmo}
 \begin{enumerate}
     \item Desordenar los datos
     \item Separar en k folds del mismo tamaño
@@ -516,7 +576,7 @@ En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa
 
 Cada instancia tiene un valor numérico, se quieren predecir una o mas respuestas a partir de varios atributos. Para evaluarlo tenemos un rango de incerteza.
 
-\textbf{Error cuadrático medio}
+\subsubsection*{Error cuadrático medio}
 \begin{equation}
     MSE = \frac{1}{n} \sum^{n} (y^{i}-\hat{y}^{i})^{2}
 \end{equation}
@@ -559,7 +619,7 @@ Forma de observar los residuos que nos da el modelo. Si da algo que no es razona
 %imagenes.
 
 
-\subsection{Regularización}
+\subsection{Regularización} \label{regularizaciones}
 \begin{itemize}
     \item Técnica para evitar el overfitting.
     \item Busca hacer mas homogéneos los modelos.
@@ -571,7 +631,7 @@ Forma de observar los residuos que nos da el modelo. Si da algo que no es razona
     Z = \frac{X_i - \mu}{\sigma}
 \end{equation}
 
-\textbf{Causas de overfitting}
+\subsubsection*{Causas de overfitting}
 \begin{itemize}
     \item Features irrelevantes: No tienen relacion con el target. \textit{Tener cuidado cuando el numero de caracteristicas esta cerca del de observaciones.}
     \item Features correlacionados: El modelo se hace asumiendo independencia.
@@ -596,7 +656,7 @@ Es el caso en que q = 1. Esta regularización puede llegar a anular coeficientes
 Es una combinación de Lasso y Ridge. Agrega ambos términos a la cuenta, haciendo que cada uno aporte lo valioso que tiene.
 
 \subsection{Robustez}
-\textbf{Outlier}
+\subsubsection*{Outlier}
 \begin{itemize}
     \item Observación que se desvía tanto de las otras observaciones como para levantar sospechas de que fue generada por otro mecanismo.
     \item En algunos casos nos puede interesar encontrarlo. \textit{Ej. Robo de tarjeta de crédito}
