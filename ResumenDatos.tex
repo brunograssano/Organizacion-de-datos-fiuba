@@ -278,7 +278,7 @@ Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunt
 
 \item La dirección en que se maximiza es en la del autovector $\mu$ de $\sum$ (matriz de covarianza de los datos) cuyo autovalor $\lambda$ asociado es mayor.
 
-\item La reducción PCA es unica. Da siempre el mismo resultado. (Determinista)
+\item La reducción PCA es única. Da siempre el mismo resultado. (Determinista)
 
 \item La proyección de X en $k$ dimensiones esta dado en la matriz $z = x * v$. Su reconstrucción es con $x = z * v^{t}$
 
@@ -393,7 +393,7 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
     \item Sirven como ejemplo para entender la estructura y funcionamiento de otros algoritmos.
     \item Cada nodo evalúa un atributo.
     \item El nodo tiene tantos hijos como posibles atributos tenga.
-    \item Si las instancias estan lo suficientemente bien clasificadas termino (Se vuelven hojas).
+    \item Si las instancias están lo suficientemente bien clasificadas termino (Se vuelven hojas).
 \end{itemize}
 
 \subsubsection*{¿Cual es el mejor atributo?}
@@ -437,11 +437,15 @@ Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecino
     \item Es un modelo simple.
     \item El entrenamiento es muy rápido, ya que consiste en agarrar los puntos y ver solamente.
     \item La contraparte es que la consulta se vuelve lenta.
-    \item Tambien como funciona el modelo hace que se ocupe mucho espacio en disco.
+    \item También como funciona el modelo hace que se ocupe mucho espacio en disco.
     \item Es susceptible a escalas.
 \end{itemize}
 
-%imagen
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{imagenesResumen/KNN.png}
+    \caption{Ejemplo de KNN.}
+\end{figure}
 
 
 \subsection{Naive Bayes}
@@ -493,7 +497,11 @@ Algo a tener en cuenta, es evitar los \textit{data leaks}, esto sucede cuando pa
 
 El particionado tiene que ser random. No debe de agarrar las primeras x instancias y listo. Se le puede pedir cuando se esta partiendo que respete la distribución de las clases. Muy útil para cuando se tienen casos muy des-balanceados. \textit{Ej. Clase positivo es el 10\% y el resto negativo.}
 
-%imagen 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imagenesResumen/TrainTestSplit.jpg}
+    \caption{Division de los datos}
+\end{figure}
 
 \subsection{Crossvalidation K-Fold}
 
@@ -507,7 +515,12 @@ Consiste en dividir varias veces los datos, e ir cambiando el conjunto. Esto hac
 \end{enumerate}
 
 \textit{Nota: Stratified K-fold mantiene las proporciones.}
-%imagen 
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imagenesResumen/CVKFold.png}
+    \caption{Funcionamiento de CV K-fold}
+\end{figure}
 
 \subsection{Grid Search}
 
@@ -586,22 +599,39 @@ Para encontrar la mejor combinación, hay que explorar el espacio de posibles co
 
 Un ensamble es una unión de muchos modelos juntos haciendo predicciones sobre un problema. Cada modelo ajustaría de forma distinta, agarrando una parte del concepto que se busca. Esto causa que se tenga un bajo sesgo y se reduzca la varianza.
 
-%imagen pag 63 cuaderno
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imagenesResumen/ConceptoEnsamble.PNG}
+    \caption{Funcionamiento de los ensambles}
+\end{figure}
 
 \subsection{Bagging}
 
-%imagen
+Ensamble que funciona construyendo nuevos conjuntos de entrenamiento usando bootstrap. Realiza un muestreo con remplazo de las instancias.
 
-La tasa de error reduce con el numero de clasificadores. Mientras mas tenga mas me voy a estar acercando al concepto.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/Bagging.PNG}
+    \caption{Ej. Bagging}
+\end{figure}
+
+La tasa de error reduce con el numero de clasificadores. Mientras mas tenga mas me voy a estar acercando al concepto. No suele aumentar el sobre-ajuste en este caso.
+
+\textit{Problema: Si se utiliza con arboles, y se tienen pocos atributos importantes, los arboles se van a parecer entre si. Por eso conviene Random Forest en ese caso.}
 
 \subsection{Random Forest}
 
 \begin{itemize}
-    \item Igual a bagging, pero en cada nodo solo hay un subconjunto de atributos.
+    \item Igual a bagging, pero en cada nodo solo hay un subconjunto de atributos elegidos al azar.
     \item Es bueno para selección de features.
     \item Al aumentar la cantidad de arboles no aumenta el overfitting.
 \end{itemize}
-%imagen
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/RandomForest.png}
+    \caption{Forma de Random Forest}
+\end{figure}
 
 
 \subsection{Boosting}
@@ -613,19 +643,42 @@ La tasa de error reduce con el numero de clasificadores. Mientras mas tenga mas 
     \item Algunas implementaciones son AdaBoost, GradientBoost, XGBoost.
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/Boosting.png}
+    \caption{Comparación Boosting y Bagging}
+\end{figure}
+
 \subsection{Híbridos}
 \subsubsection{Voting}
 Consiste en construir N modelos usando los mismos datos, y luego tomar la predicción mayoritaria.
 
-%imagen
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenesResumen/Voting.png}
+    \caption{Sistema de Voting}
+\end{figure}
 
 \subsubsection{Stacking}
-Entrenar distintos modelos base, y uno mas que al final recibe las predicciones realizadas. Este ensamble es una mejora del método de votación.
-%imagen
+Entrenar distintos modelos base, y uno mas que al final recibe las predicciones realizadas. Este ensamble es una mejora del método de votación. Este agregado que remplaza el sistema de votación es de meta-aprendizaje. Generalmente son arboles, NB, SVM, o Perceptron para el modelo final.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenesResumen/Stacking.png}
+    \caption{Sistema de Stacking}
+\end{figure}
 
 \subsubsection{Cascading}
-En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa tendría un solo modelo, el cual se entrenaría sobre las instancias con baja certeza del modelo anterior.
-%imagen
+En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa tendría un solo modelo, el cual se entrenaría sobre las instancias con baja certeza del modelo anterior. Se suele usar cuando se necesita una alta certeza de la predicción. \textit{Ej. Robo de tarjeta de crédito}
+
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/Cascading.jpeg}
+    \caption{Ejemplo de Cascading}
+\end{figure}
+
+
 \textit{Nota: Cascadas muy profundas pueden producir overfitting.}
 
 \section{Regresiones}
@@ -755,7 +808,57 @@ Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me q
 
 
 \section{Redes Convolucionales}
+Tipo especial de red que se usa para problemas abstractos o difíciles de explicitar. Se basan en ir detectando conceptos e ir resolviendo. Empieza con capas simples y va llegando a las complejas Es muy útil para la clasificación de imágenes.
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/RedesConvolucionalesSistema.PNG}
+    \caption{Sistema de trabajo de estas redes.}
+\end{figure}
+
+Tiene distintos usos:
+\begin{itemize}
+    \item Clasificación
+    \item Localización
+    \item Detección de objetos
+    \item Segmentación
+\end{itemize}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/TiposDeUsosRedesConvolucionales.PNG}
+    \caption{Ejemplos con algunos de los usos posibles.}
+\end{figure}
+
+\begin{itemize}
+    \item A medida que se avanza, las capas mas profundas implican conceptos mas complejos.
+    \item Se llaman redes convolucionales porque aplican la operación de convolución. \href{https://i1.wp.com/datasmarts.net/es/wp-content/uploads/2018/11/full_padding_no_strides_transposed.gif?resize=264\%2C300&ssl=1}{Gif}
+    \item Las redes neuronales comunes no escalan bien en este tipo de problema.
+\end{itemize}
+
+\subsection*{Arquitectura}
+Las redes estas tienen 2 tipos de capas:
+\begin{itemize}
+    \item Classification layers: Son neuronas que se conectan con todo el volumen de entrada. (Capa densa comun)
+    \item Feature extraction layers: Formadas por capas de convolucion y de filtros.
+\end{itemize}
+
+En las capas de convolución se aplican filtros(o kernel) también. Estos filtros reducen la dimensionalidad y tienen sus parámetros que son aprendidos en el entrenamiento. \textit{Ej. \href{https://developers.google.com/machine-learning/practica/image-classification/images/maxpool_animation.gif?hl=es}{MaxPool}, se queda con el valor mas alto}.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/ArquitecturaRedConvolucional.PNG}
+    \caption{Arquitectura de la red}
+\end{figure}
+
+En los filtros hay que tener en cuenta 3 propiedades:
+\begin{itemize}
+    \item Stride: Determina los pasos del filtro.
+    \item Padding: Hace el rellenado de la imagen.
+    \item Depth Volume: Determina la profundidad.
+\end{itemize}
+
+Estas redes tienen también métodos de regularización. Los ya vistos en \ref{regularizaciones}
 
 \section{Redes Sociales}
 \begin{itemize}
