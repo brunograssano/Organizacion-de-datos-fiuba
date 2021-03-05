@@ -802,10 +802,155 @@ Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me q
 
 
 \section{Redes Neuronales}
+\begin{itemize}
+    \item Basado en neuronas con conexiones con distinta intensidad.
+    \item Se activa una neurona cuando recibe suficiente estimulo de las conexiones entrantes.
+    \item El primer modelo que surgió fue el Perceptron, a partir de varias entradas daba una salida con una función de activación.
+    \item Tienen también una variable Bias, la cual indica que tan fácil es que devuelva 1 la neurona.
+    \item El Perceptron funcionaba para casos lineales. \textit{Ej. OR, AND}. 
+    \item Unir varios Perceptron hace que actúen como si fuera uno solo.
+    \item La solución, fue utilizar una función de activación no lineal. \textit{Función Sigmoidea}. Esta función es aplicada al resultado de la ecuación.
+\end{itemize}
+
+Para entrenar una red era necesario poder ajustar los pesos y bias. Esto se hace encontrando los mejores valores de cada uno, y se va consiguiendo a medida que se va reduciendo una función de costo. \textit{Ej. funciones de costo: MSE para regresión, Binaria para clasificación}. Gracias a esta función de costo, ahora la red sabe cuando se equivoco. 
+
+Le falta saber como actualizar los pesos. Esto se consigue utilizando el descenso del gradiente, que apunta a la dirección en la cual la función crece mas rápido. Esta velocidad con la que cambia se conoce como \textit{learning rate}. Si es muy alto puede ir hacia algún mínimo local, si es bajo puede no moverse.
+
+Para cuando se tiene mas de una capa, se utiliza Back Propagation, ya que una neurona depende de los valores de las activaciones de las neuronas de la capa anterior. Con esto se busca modificar las activaciones anteriores para conseguir minimizar aun mas la función de costo.
+
+\subsubsection*{¿Que necesita la red?}
+\begin{itemize}
+    \item Son necesarias tantas neuronas de salida como cantidad de clases a predecir.
+    \item La arquitectura, la cantidad de neuronas y la cantidad de capas.
+    \item Funciones de activación. \textit{Ej. Sigmoidea, RELU, Softmax}
+    \item Optimizadores que determinen como modificar los pesos.\textit{SGD (descenso del gradiente), RMSProp, Adam}.
+    \item Una función de costo que se va a estar minimizando.\textit{MSE, MAE, Cross Entropy}.
+\end{itemize}
+
+Todas estas configuraciones dependen del problema. 
+
+\subsubsection*{Métodos de regularización}
+\begin{itemize}
+    \item L1, L2, Elastic Net: Penalizan el valor de los pesos de la red.
+    \item Dropout: Apaga activaciones aleatoriamente durante el entrenamiento. Esto evita que la red no dependa de unas pocas neuronas.
+    \item Early Stopping: Evita el sobreajuste parando el entrenamiento a partir de cierto tiempo.
+    \item Data Augmentation: Agrega datos usando los que ya se tienen. (Aplica transformaciones). \textit{Ej. Imagen de un gato, se rota, sigue siendo un gato.}
+\end{itemize}
 
 
 \section{PLN : Procesamiento del Lenguaje Natural}
+Área enfocada a procesar y entender el lenguaje humano. Tiene un montón de usos. \textit{Ej. Traducciones, modelado de tópicos, clasificación de texto, generador de texto...}
 
+\subsection{Enfoques}
+
+\begin{itemize}
+    \item Basado en reglas. Busca expresiones regulares, trata de encontrar si un texto cumple con determinadas características.
+    \item Modelos probabilísticos. Son clasificadores lineales. Maximizan el likelihood
+    \item Deep Learning. Son redes neuronales recurrentes o convolucionales.
+\end{itemize}
+
+\subsection{Semantic Slot Filling}
+Es una tecnica que asigna categorías semánticas a distintas partes de un texto. Permite que el programa entienda mejor que hacer. Una forma de encararlo es con gramáticas libres de contexto.\textit{Ej. Puede ser Show me..., I want..., Can i see... }.
+
+Los problemas con esta técnica son:
+\begin{itemize}
+\item Que debe de hacerse manualmente y hay que escribir todas las reglas. Estas son definidas por el humano.
+\item Como funciona la técnica, se consigue un presicion alto pero un recall bajo. 
+\item Es necesario un corpus de entrenamiento que tenga asignado para cada set de palabras su correspondiente categoría semántica.
+\item Requiere de un proceso de feature engineering, ya que hay que preguntarse si las palabras están en mayúscula, cual es el siguiente slot, ...
+\item En Deep Learning hay que usar un corpus de datos aun mas grandes.
+\end{itemize}
+
+\subsection{Pre-procesamiento}
+\subsubsection*{Tokenización}
+El texto tiene distintas formas de verse, como caracteres, palabras, frases, oraciones,...
+
+Para hacer esto, podemos utilizar 'Tokens' \textit{Ej. Espacios, comas, cualquier unidad útil para separar}. En otros lenguajes esto se queda corto.
+
+\subsubsection*{Normalización}
+Se busca reducir la dimensionalidad. \textit{Ej. Lobos puede pasar a ser Lobo directamente, no nos interesaría el plural.}
+
+Para esto tenemos 2 formas distintas de trabajarlo.
+\begin{itemize}
+    \item Stemming: Elimina sufijos y prefijos. Trata de llevar la palabra a la raiz.
+    \textit{ Ej.
+    \begin{itemize}
+        \item Feet $\Rightarrow$ Feett
+        \item Wolves $\Rightarrow$ Wolv
+        \item Talked $\Rightarrow$ Talk
+    \end{itemize}
+    }
+    
+    
+    \item Lematización: Realiza un análisis morfológico y de vocabulario. 
+    \textit{ Ej.
+    \begin{itemize}
+        \item Feet $\Rightarrow$ Foot
+        \item Wolves $\Rightarrow$ Wolf
+        \item Talked $\Rightarrow$ Talk
+    \end{itemize}
+    }
+\end{itemize}
+
+\subsubsection*{Extracción de información}
+Busca organizar la información de manera útil. Distribuirla de forma precisa para el modelo.
+
+\subsubsection*{Name Entity Recognition}
+Busca reconocer y clasificar el texto en categorias.
+
+\textit{Ej. \underline{Ana} se recibió de \underline{ingeniería informática} en la \underline{UBA}.}
+
+\subsubsection*{Colocaciones}
+Son frases compuestas por mas de una palabra. \textit{Ej. Buenos Aires}
+
+\subsection{Feature Extraction}
+\subsubsection*{Bag of Words}
+Cuenta la cantidad de ocurrencias de un token en el texto. El objetivo que tiene es buscar palabras distintivas. \textit{Ej. Excelente, buenísimo,...}
+
+Por cada token se crea una columna de características y se va contando.
+
+Los problemas con esta forma, es que se pierde el orden, que los contadores no están normalizados, y que se tiene una alta dimensionalidad.
+
+Una posible solución es contar de a pares de tokens, pero esto hace que crezca aun mas la dimensionalidad.
+
+\subsubsection*{Soluciones}
+Eliminar N-Gramas. Estos serian los de alta frecuencia y los de baja. \textit{Ej. y, o, algún nombre}. El objetivo es quedarse con las palabras que tienen una frecuencia media.
+
+
+\subsubsection*{TF-IDF}
+Se puede usar para una mejora de Bag of Words remplazando a los contadores. Al aplicarlo habria que normalizar cada fila.
+\begin{itemize}
+\item $TF(t,d)$ - Cuenta la frecuencia de un termino t en el documento d.
+\item $IDF(t,D)$= log( $\frac{|D|}{Ocurrencias De t} $) - Cantidad total de documentos en los que aparece un termino. (Inverse Document Frequency)
+\item $TF-IDF(t,d,D) = IDF \cdot TF$
+\end{itemize}
+
+
+\subsection{Hipotesis distribucional}
+Se asume que la semántica de una palabra esta determinada por el contexto en el que aparece. Esto significaría que se puede obtener el significado de las palabras si las resumimos en los contextos en las cuales aparecen
+
+
+\subsection{Word2Vec}
+
+Es una forma por la cual se agrupan palabras. Si las palabras tienen significados similares debe de significar que están en espacios vectoriales cercanos. (Esto incluso permite que se puedan realizar operaciones con ellas. \textit{Ej. $Rey - Hombre + Mujer = Reina$})
+
+El objetivo que tiene es entrenar una red neuronal con las palabras del texto, de forma tal de que dada una palabra, nos diga la probabilidad de que cada palabra del vocabulario sea su vecina. (Entrenamos la red y nos quedamos con los pesos de la capa ocula, los 'word vectors')
+
+\textit{Window size}: parámetro que determina el numero de palabras que define un contexto.
+
+La desventajas que tiene este modelo es que no puede trabajar con palabras que no conoce. 
+
+\subsection{FastText}
+Mejora de Word2Vec. Para esto trata a las palabras como n-gramas. \textit{Ej. n=2, Hola se representa como Ho,ol,la. Hola se interpreta como la suma de esos 3 n-gramas}. Con este cambio el modelo es capaz de generar embeddings de palabras que no habia visto durante el entrenamiento.
+
+El problema que trae este cambio, es que modelarlo trae un crecimiento de dimensionalidad y memoria enorme. \textit{Ej. 'Se ha visto que para un tamaño de corpus de 50 millones de palabras únicas, el tamaño de RAM requerido puede ser de hasta 256 GB de RAM.'}
+
+Para evitar que se pase, esta limitado en la cantidad máxima de palabras (30 millones). Si se esta alcanzando el limite empieza a hacer remplazos (podas).
+
+La implementación de este modelo esta hecha en C++, por lo que funciona rápidamente debido a la buena optimización de Threads que tiene.
+
+
+Otros ejemplos similares son Bert y GPT-3.
 
 \section{Redes Convolucionales}
 Tipo especial de red que se usa para problemas abstractos o difíciles de explicitar. Se basan en ir detectando conceptos e ir resolviendo. Empieza con capas simples y va llegando a las complejas Es muy útil para la clasificación de imágenes.
