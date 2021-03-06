@@ -9,7 +9,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{float}
-
+\usepackage{amsfonts}
 \usepackage{minted} 
 
 \pagestyle{fancy} % Encabezado y pie de página
@@ -41,13 +41,7 @@
 \newpage
 
 \section{Introducción}\label{sec:intro}
-
-
-\subsection{Cosas a tener en cuenta}
-
-
-\subsection{Recomendaciones}
-
+El presente archivo es un resumen que recopila el contenido dado en la materia Organización de datos, Curso Collinet 2C2020. Lo fui armando con los diferentes apuntes que tome durante las clases, contenido presentado durante las mismas, y en algunos casos busque algo mas de información para completar.
 
 \section{Análisis Exploratorio}
 Es un enfoque que comprende un conjunto de tareas para analizar conjuntos de datos, de forma tal de encontrar sus principales características.
@@ -115,8 +109,9 @@ Esto busca reducir la dimensión mediante la eliminación de variables poco úti
     \item Existe una amplia variedad de tipos de gráficos, cada uno con su objetivo.
 \end{itemize}
 
+Pagina con varios tipos de \href{https://www.python-graph-gallery.com/}{gráficos}.
 
-
+\newpage
 
 \section{Clustering}
 
@@ -153,6 +148,14 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
 \end{itemize}
 
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{imagenesResumen/K-Means.jpg}
+    \caption{Ejemplo de K-Means, notar como se va moviendo el centroide.}
+\end{figure}
+
+\newpage
+
 \subsection{Clustering Jerárquico Aglomerativo}
 \subsubsection*{Notas}
 \begin{itemize}
@@ -173,6 +176,12 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
     \item Sensible a ruido
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/ClusteringJerarquicoAglomerativo.PNG}
+    \caption{Ejemplo de Clustering Jerarquico Aglomerativo.}
+\end{figure}
+
 \subsection{Clustering Jerárquico Divisivo}
 Similar al anterior en cuanto a procedimiento, solo que se comienza todo junto y se va dividiendo a medida que se va bajando.
 
@@ -180,7 +189,7 @@ Similar al anterior en cuanto a procedimiento, solo que se comienza todo junto y
 Se busca conseguir una mejora al ahorrar una cantidad de pasos en el algoritmo.
 
 \begin{itemize}
-    \item \textbf{CORE POINTS} Densidad alta
+    \item \textbf{CORE POINTS} Son los puntos que tienen una densidad alta
     \item \textbf{BORDER POINTS} Vecinos de un core
     \item \textbf{NOISE POINTS} Ninguno de los otros dos
 \end{itemize}
@@ -199,6 +208,28 @@ Se busca conseguir una mejora al ahorrar una cantidad de pasos en el algoritmo.
     \item Funciona mal con datos de densidad variable
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imagenesResumen/DBSCAN.png}
+    \caption{Ejemplo de DBSCAN.}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/ComparacionKMeansDBSCAN.png}
+    \caption{Comparación de la performance de DBSCAN con K-Means.}
+\end{figure}
+
+\subsubsection*{Algoritmo}
+\begin{enumerate}
+    \item Etiquetar cada punto como core, border o noise.
+    \item Eliminar los puntos noise.
+    \item Poner una arista entre los puntos que son vecinos entre si.
+    \item Los componenetes conexas son un cluster.
+    \item Asignar los puntos border.
+\end{enumerate}
+
+
 \subsection{HDBSCAN}
 Hereda del anterior. Es una mejora. Tiene un valor $\epsilon$ variable, densidad variable para evitar puntos que sean ruido, y mejora la velocidad.
 
@@ -211,39 +242,57 @@ Hereda del anterior. Es una mejora. Tiene un valor $\epsilon$ variable, densidad
     \item Similitud entre cada par de instancias.
     \item El resultado es bueno si la matriz es diagonal en bloques.
     \item \textbf{Cohesión} Mide cuan relacionados están los elementos de un cluster
-    \item \textbf{Separación} Cuan lejos están los distintos clusters entre si % todo revisar def
+    \item \textbf{Separación} Cuan lejos están los distintos clusters entre si.
 \end{itemize}
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{imagenesResumen/MatrizSimilitud.jpg}
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/MatrizSimilitud.jpg}
     \caption{A la derecha se puede ver la matriz de similitud. Notar que es diagonal en bloques y los clusters estan bien clasificados.}
 \end{figure}
 
 \subsubsection{Coheficiente de Silhouette}
-Mientras mas cercano al centro, mas cercano a 1. Indica que tan bien definidos están los clusters.
+Mientras mas cercano al centro, mas cercano a 1. Se mueve de -1 a 1. Indica que tan bien definidos están los clusters.
 
+\begin{equation}
+    s_i = \frac{b_i - a_i}{max\{b_i,a_i\}}
+\end{equation}
+
+Siendo $a$ la distancia promedio de $x_i$ hacia otros puntos del mismo cluster, y $b$ siendo la distancia promedio de $x_i$ hacia los puntos del cluster mas cercano.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{imagenesResumen/SilhouetteCoef.png}
+    \includegraphics[width=0.5\textwidth]{imagenesResumen/SilhouetteCoef.png}
     \caption{Grafico mostrando el avance con este coeficiente}
 \end{figure}
+
+\newpage
 
 \subsubsection{Rand Index}
 
 Mide la similitud entre 2 resultados de clustering. Va de 0 a 1.
 
-% todo expandir, agregar cuenta y explicarla
+\begin{itemize}
+    \item a: son los pares que que están en un mismo cluster en X y en un mismo cluster en Y.
+    \item b: pares que están en distintos clusters en X y en distintos Y.
+    \item c: pares que están en un mismo cluster en X, pero en distintos en Y.
+    \item d: pares que están en distintos clusters en X y en el mismo en Y.
+\end{itemize}
+
+\begin{equation}
+    R = \frac{a+b}{a+b+c+d}
+\end{equation}
 
 \subsection{Elbow Method}
 Método para encontrar el numero ideal de clusters. Se van graficando los resultados a medida que aumenta el K. Se termina eligiendo el numero a partir del cual no hay mejora.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{imagenesResumen/ElbowMethod.png}
+    \includegraphics[width=0.8\textwidth]{imagenesResumen/ElbowMethod.png}
     \caption{Método de Elbow. Se puede ver como a partir de 3 no hay una gran mejora.}
 \end{figure}
+
+\newpage
 
 \section{Reducciones dimensionales}
 
@@ -276,13 +325,15 @@ Dada una variable \begin{math} X = (x_1,...,x_n) \end{math}, buscamos un conjunt
 
 \item El resultado provoca una rotación o cambio del sistema de coordenadas.
 
+\item El método busca rotar el dataset de manera de maximizar la varianza de los datos en proyecciones ortogonales. Para esto asume que los datos se encuentran en un subespacio lineal de dimensión menor a la original.
+
 \item La dirección en que se maximiza es en la del autovector $\mu$ de $\sum$ (matriz de covarianza de los datos) cuyo autovalor $\lambda$ asociado es mayor.
 
 \item La reducción PCA es única. Da siempre el mismo resultado. (Determinista)
 
-\item La proyección de X en $k$ dimensiones esta dado en la matriz $z = x * v$. Su reconstrucción es con $x = z * v^{t}$
+\item La proyección de X en $k$ dimensiones esta dado en la matriz $Z = X * V$. Su reconstrucción es con $X = Z * V^{t}$
 
-\item Si la varianza en v es menor a 1, se perdieron datos.
+\item Si la varianza en V es menor a 1, se perdieron datos y la reconstrucción no sera perfecta.
 
 \item \textit{Si todos los valores son iguales, (Var = 0) esa columna no aporta mucho}
 
@@ -324,6 +375,12 @@ Es un método que consiste en preservar la distancia entre los puntos. Intenta u
     \item Difícil determinar que distancia usar.
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/MDS.PNG}
+    \caption{Conversión utilizando MDS}
+\end{figure}
+
 
 \subsection{ISOMAP}
 
@@ -332,9 +389,9 @@ Similar al anterior en cuanto a preservar la distancia. Se diferencia en que est
 \subsubsection*{Algoritmo}
 \begin{enumerate}
     \item Determinar vecinos mas cercanos.
-    \item Construir grafo.
-    \item Computar el camino mínimo (ej. Dijsktra).
-    %%% algo mas?
+    \item Construir grafo de vecinos.
+    \item Computar el camino mínimo \textit{Ej. Dijsktra}.
+    \item Generar matriz de distancias en base al anterior punto, y aplicar MDS.
 \end{enumerate}
 
 \subsubsection*{Fortalezas}
@@ -350,6 +407,13 @@ Similar al anterior en cuanto a preservar la distancia. Se diferencia en que est
     \item Muchos vecinos puede hacer que se rompa la distancia geodésica y de algo mas como MDS.
 \end{itemize}
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/ISOMAP.jpeg}
+    \caption{Conversión utilizando ISOMAP.}
+\end{figure}
+
+\newpage
 
 \subsection{t-SNE}
 
@@ -376,6 +440,7 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
 \subsubsection*{Fortalezas}
 \begin{itemize}
     \item Muy bueno para visualizar datos.
+    \item Conserva estructuras no lineales.
 \end{itemize}
 
 \subsubsection*{Debilidades}
@@ -384,6 +449,8 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
     \item Escala en tiempo con dimensiones y puntos.
     \item No sirve para nuevos puntos
 \end{itemize}
+
+\newpage
 
 \section{Aprendizaje supervisado}
 \subsection{Arboles de decisión}
@@ -399,11 +466,36 @@ La idea detrás de este método es ir de $\mathbb{R}^{n} \Rightarrow \mathbb{R}^
 \subsubsection*{¿Cual es el mejor atributo?}
 Lo podemos medir con distintos indicadores.
 \begin{itemize}
-    \item \textbf{Pureza de Gini} Se elige el que mas reduce la impureza. %todo agregar cuenta y explicarla
-    \item \textbf{Ganancia de información} Se busca maximizar la ganancia. %idem, cuenta y explicar, entropia
+    \item \textbf{Pureza de Gini} Se elige el que mas reduce la impureza. 
+    
+    \begin{math}
+    Gini(S) = 1 - \sum_{c\in Clases}(\frac{|S_c|}{|S|})^2
+    \end{math}
+    
+    Siendo $S_c$ las instancias de la clase $c$.
+    
+    \begin{math}
+    GiniGain(S,A) = Gini(S) - \sum_{v\in Valores(A)}\frac{|S_v|}{|S|} \cdot Gini(S_v)
+    \end{math}
+    
+    
+    \item \textbf{Ganancia de información} Se busca maximizar la ganancia. 
+    
+    Entropía de una muestra:
+    \begin{math}
+    H(S) = \sum_{c\in Clases} - p_c \cdot log_2 p_c
+    \end{math}
+    
+    Siendo $p_c$ la proporción de instancias S pertenecientes a C.
+    
+    \begin{math}
+    InfoGain(S,A) = H(S) - \sum_{v\in Valores(A)} \frac{|S_v|}{|S|} H(S_v)
+    \end{math}
+    
 \end{itemize}
 
-%imagenes
+Ambos criterios son numéricamente similares.
+
 
 \subsubsection*{Fortalezas}
 
@@ -427,6 +519,8 @@ Sucede cuando se 'aprendió de memoria' los datos. En el caso de los arboles se 
 
 Las soluciones en arboles son, parar a partir de cierta profundidad, o realizar una poda (Pruning)  (sacar ramas cuando mejore la performance). Otra opción es Post-Pruning.
 
+\newpage
+
 \subsection{KNN}
 Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecinos.
 
@@ -441,7 +535,7 @@ Este modelo busca predecir la instancia de un nuevo punto a partir de sus vecino
     \item Es susceptible a escalas.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[!htb]
     \centering
     \includegraphics[width=0.5\textwidth]{imagenesResumen/KNN.png}
     \caption{Ejemplo de KNN.}
@@ -459,6 +553,7 @@ Este es un modelo que se basa en el calculo de probabilidades utilizando la teor
 \end{itemize}
 
 %quizas meter algun ejemplo?
+\newpage
 
 \subsection{SVM}
 
@@ -484,6 +579,8 @@ Este hiper-parámetro se controla con el C. A mayor C sae tiene HM, a menor SM.
 % meter la cuenta?
 
 % agregar imagen
+
+\newpage
 
 \section{Evaluación y selección}
 
@@ -521,6 +618,9 @@ Consiste en dividir varias veces los datos, e ir cambiando el conjunto. Esto hac
     \includegraphics[width=0.6\textwidth]{imagenesResumen/CVKFold.png}
     \caption{Funcionamiento de CV K-fold}
 \end{figure}
+
+
+\newpage
 
 \subsection{Grid Search}
 
@@ -594,6 +694,7 @@ for h1 in valores_hiperparametro_1:
 
 Para encontrar la mejor combinación, hay que explorar el espacio de posibles combinaciones, usando idealmente \textit{K-fold} para medir el desempeño.
 
+\newpage
 
 \section{Ensambles}
 
@@ -680,6 +781,8 @@ En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa
 
 
 \textit{Nota: Cascadas muy profundas pueden producir overfitting.}
+
+\newpage
 
 \section{Regresiones}
 
@@ -801,6 +904,8 @@ Forma mas algorítmica. Se seleccionan n valores random, se hace un ajuste de re
 Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me quedo con esa. Es 'insensitivo' a outliers. No depende de hiper-parámetros.
 
 
+\newpage
+
 \section{Redes Neuronales}
 \begin{itemize}
     \item Basado en neuronas con conexiones con distinta intensidad.
@@ -837,6 +942,8 @@ Todas estas configuraciones dependen del problema.
     \item Data Augmentation: Agrega datos usando los que ya se tienen. (Aplica transformaciones). \textit{Ej. Imagen de un gato, se rota, sigue siendo un gato.}
 \end{itemize}
 
+
+\newpage
 
 \section{PLN : Procesamiento del Lenguaje Natural}
 Área enfocada a procesar y entender el lenguaje humano. Tiene un montón de usos. \textit{Ej. Traducciones, modelado de tópicos, clasificación de texto, generador de texto...}
@@ -952,6 +1059,8 @@ La implementación de este modelo esta hecha en C++, por lo que funciona rápida
 
 Otros ejemplos similares son Bert y GPT-3.
 
+\newpage
+
 \section{Redes Convolucionales}
 Tipo especial de red que se usa para problemas abstractos o difíciles de explicitar. Se basan en ir detectando conceptos e ir resolviendo. Empieza con capas simples y va llegando a las complejas Es muy útil para la clasificación de imágenes.
 
@@ -1003,7 +1112,9 @@ En los filtros hay que tener en cuenta 3 propiedades:
     \item Depth Volume: Determina la profundidad.
 \end{itemize}
 
-Estas redes tienen también métodos de regularización. Los ya vistos en \ref{regularizaciones}
+Estas redes tienen también métodos de regularización. Los ya vistos en \ref{regularizaciones}.
+
+\newpage
 
 \section{Redes Sociales}
 \begin{itemize}
@@ -1087,6 +1198,8 @@ Su eliminación no desconecta al grafo, pero aumenta el recorrido.
 
 Hay un balanceo estructural si todos los triángulos de una estructura son estables. Caso contrario se tiende a romper y generar problemas.
 
+\newpage
+
 \section{Aprendizaje por refuerzo}
 \textit{
 Un \underline{agente} (similar a modelo) tiene sensores para observar el \underline{estado} de su entorno. Con el cual puede hacer \underline{acciones} para alterar ese estado. Estas acciones conllevan una \underline{recompensa} numérica.
@@ -1110,6 +1223,8 @@ Se le indica un $\alpha$ (learning rate) que indica que tanto aprende. Si se aum
 \end{itemize}
 
 Este algoritmo (Q-Learning) tiene los problemas de que no aprende la noción de estados similares y de que a nivel practico no escala bien, se vuelve intratable (no es el caso teórico). Una alternativa para evitar esto, es aproximar la función Q del algoritmo con una red neuronal de convolución.
+
+\newpage
 
 \section{Ética y moral en ML}
 \subsection{¿Por que discutirlo?}
