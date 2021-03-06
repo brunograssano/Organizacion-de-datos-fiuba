@@ -565,7 +565,7 @@ Modelo que busca que una recta/hiper-plano separe las clases de la mejor forma p
     \item Las instancias mas cercanas se vuelven 'Support Vectors'
     \item De hiper-parámetro tiene M, que determina el margen, es decir, el espacio entre los distintos tipos de puntos. Busca el caso que maximice esto.
     \item Si no encontró una recta/hiper-plano, los puntos no son linealmente separables.
-    \item Se consigue la recta creando una nueva dimensión. Como esto es costoso se puede utilizar Kernel Trick, que hace que se 'piense que esta en otra dimensión'.
+    \item Se consigue la recta creando una nueva dimensión. Como esto es costoso se puede utilizar Kernel Trick, que hace que se 'piense que esta en otra dimensión'. \textit{Ej. lineal, polinomial, sigmoideo, rbf}
 \end{itemize}
 
 \subsubsection*{Hard Margin vs Soft Margin}
@@ -576,9 +576,11 @@ En Soft Margin se permite algo de ruido y outliers.
 
 Este hiper-parámetro se controla con el C. A mayor C sae tiene HM, a menor SM.
 
-% meter la cuenta?
-
-% agregar imagen
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imagenesResumen/SVM.png}
+    \caption{Ejemplo de SVM.}
+\end{figure}
 
 \newpage
 
@@ -760,6 +762,8 @@ Consiste en construir N modelos usando los mismos datos, y luego tomar la predic
     \caption{Sistema de Voting}
 \end{figure}
 
+\newpage
+
 \subsubsection{Stacking}
 Entrenar distintos modelos base, y uno mas que al final recibe las predicciones realizadas. Este ensamble es una mejora del método de votación. Este agregado que remplaza el sistema de votación es de meta-aprendizaje. Generalmente son arboles, NB, SVM, o Perceptron para el modelo final.
 
@@ -784,9 +788,17 @@ En este ensamble se pasan sucesivamente los datos de un modelo a otro. Cada capa
 
 \newpage
 
+
 \section{Regresiones}
 
-Cada instancia tiene un valor numérico, se quieren predecir una o mas respuestas a partir de varios atributos. Para evaluarlo tenemos un rango de incerteza.
+Cada instancia tiene un valor numérico, se quieren predecir una o mas respuestas a partir de varios atributos.  (la funcion es desconocida.)
+
+\begin{equation}
+    Y \approx f(X_1, X_2,..., X_n)
+\end{equation}
+
+
+Para evaluarlo tenemos un rango de incerteza.
 
 \subsubsection*{Error cuadrático medio}
 \begin{equation}
@@ -799,12 +811,15 @@ Cada instancia tiene un valor numérico, se quieren predecir una o mas respuesta
     \item Al llegar a una hoja se devuelve el promedio de las Y sobre las instancias que tenga.
 \end{itemize}
 
-%imagen
 
 \subsection{KNN de regresión}
 Dada una instancia, se devuelve el promedio ponderado de los valores de sus vecinos. (Z)
 
-%imagen
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/KNNRegresion.PNG}
+    \caption{Ejemplo de KNN en regresiones.}
+\end{figure}
 
 \subsection{Regresión lineal}
 Se supone una relación lineal con una variable y se procede en la cuenta. Cuadrados mínimos es una variante.
@@ -828,7 +843,11 @@ Si hay error, existe la posibilidad de que sea debido a que la relación no es l
 
 Forma de observar los residuos que nos da el modelo. Si da algo que no es razonable, dudar de que sea lineal. El gráfico nos tiene que dar una nube de puntos. No se tienen que ver relaciones.
 
-%imagenes.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/ResidualPlot.png}
+    \caption{Ejemplo mostrando un gráfico de residuos. Notar que se ve que es como una nube de puntos. No se nota algún patrón o estructura en particular.}
+\end{figure}
 
 
 \subsection{Regularización} \label{regularizaciones}
@@ -875,7 +894,6 @@ Es una combinación de Lasso y Ridge. Agrega ambos términos a la cuenta, hacien
     \item En otros casos es simplemente molesto.
 \end{itemize}
 
-%imagen
 
 Para agregarlo hay que cambiar la función de perdida.
 
@@ -896,13 +914,18 @@ Esto hace que los outliers tengan poca influencia en el modelo.
 %imagen de la recta y de las funciones
 
 \subsubsection{RANSAC}
-Forma mas algorítmica. Se seleccionan n valores random, se hace un ajuste de regresión con esos valores, y con esto se evalúa cuales puntos restantes pueden pertenecer. Este algoritmo es iterativo, sirve mucho para cuando hay muchos outliers o ruido.
+Forma mas algorítmica. Se seleccionan n valores random, se hace un ajuste de regresión con esos valores, y con esto se evalúa cuales puntos restantes pueden pertenecer con una distancia 'd' (hay que definir también la cantidad mínima de puntos internos para considerarlo un buen modelo). Este algoritmo es iterativo, sirve mucho para cuando hay muchos outliers o ruido.
 
-%imagen
+Gif mostrando el algoritmo en funcionamiento \href{https://upload.wikimedia.org/wikipedia/commons/c/c0/RANSAC_LINIE_Animiert.gif}{aquí}.
 
 \subsubsection{THEIL-SEN}
-Otra forma algorítmica. Se toman la mediana de las pendientes calculadas y me quedo con esa. Es 'insensitivo' a outliers. No depende de hiper-parámetros.
+Otra forma algorítmica. Se toman la mediana de las pendientes calculadas de a pares y me quedo con esa, despues es repetir de forma similar para la ordenada al origen. Es 'insensitivo' a outliers. No depende de hiper-parámetros.
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/ComparacionRegresiones.png}
+    \caption{Diferentes tipos de regresiones. Notar como la lineal (sin ser robusta) se desvía de lo esperado.}
+\end{figure}
 
 \newpage
 
@@ -923,16 +946,28 @@ Le falta saber como actualizar los pesos. Esto se consigue utilizando el descens
 
 Para cuando se tiene mas de una capa, se utiliza Back Propagation, ya que una neurona depende de los valores de las activaciones de las neuronas de la capa anterior. Con esto se busca modificar las activaciones anteriores para conseguir minimizar aun mas la función de costo.
 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/RedNeuronal.png}
+    \caption{Modelo de red neuronal.}
+\end{figure}
+
 \subsubsection*{¿Que necesita la red?}
 \begin{itemize}
     \item Son necesarias tantas neuronas de salida como cantidad de clases a predecir.
     \item La arquitectura, la cantidad de neuronas y la cantidad de capas.
     \item Funciones de activación. \textit{Ej. Sigmoidea, RELU, Softmax}
     \item Optimizadores que determinen como modificar los pesos.\textit{SGD (descenso del gradiente), RMSProp, Adam}.
-    \item Una función de costo que se va a estar minimizando.\textit{MSE, MAE, Cross Entropy}.
+    \item Una función de costo que se va a estar minimizando.\textit{MSE, MAE, Cross Entropy}.(Depende del problema)
 \end{itemize}
 
 Todas estas configuraciones dependen del problema. 
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenesResumen/FuncionesActivacion.png}
+    \caption{Diferentes funciones de activación.}
+\end{figure}
 
 \subsubsection*{Métodos de regularización}
 \begin{itemize}
@@ -941,6 +976,12 @@ Todas estas configuraciones dependen del problema.
     \item Early Stopping: Evita el sobreajuste parando el entrenamiento a partir de cierto tiempo.
     \item Data Augmentation: Agrega datos usando los que ya se tienen. (Aplica transformaciones). \textit{Ej. Imagen de un gato, se rota, sigue siendo un gato.}
 \end{itemize}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenesResumen/EjemplosEntrenamiento.jpeg}
+    \caption{Ejemplos de entrenamiento de una red.}
+\end{figure}
 
 
 \newpage
@@ -1205,9 +1246,13 @@ Hay un balanceo estructural si todos los triángulos de una estructura son estab
 Un \underline{agente} (similar a modelo) tiene sensores para observar el \underline{estado} de su entorno. Con el cual puede hacer \underline{acciones} para alterar ese estado. Estas acciones conllevan una \underline{recompensa} numérica.
 }
 
-%imagen
-
 Estas recompensas que el agente recibe vienen con cierta demora. Ya que hay que discernir entre cuales fueron las meritorias.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenesResumen/AprendizajeRefuerzo.PNG}
+    \caption{Sistema de aprendizaje por refuerzo.}
+\end{figure}
 
 
 \subsection{Q-Learning}
@@ -1217,12 +1262,23 @@ Se le indica un $\alpha$ (learning rate) que indica que tanto aprende. Si se aum
 
 ¿Como determinar la acción en base al estado? Hay que buscar un equilibrio entre la explotación y la exploración. Hay 2 estrategias para esto.
 
-\begin{itemize} %revisar
+\begin{itemize}
     \item $\epsilon-greedy$ Con la probabilidad $\epsilon$ elegimos al azar uno, y con 1-$\epsilon$ elegimos la acción que mejor conocemos.
-    \item $\epsilon-first$ Elegimos al azar cierta cantidad de casos, y después el que mejor conocemos. 
+    \item $\epsilon-first$ Elegimos al azar cierta cantidad de casos (1-$\epsilon$)\%, y después el que mejor conocemos ($\epsilon$)\%. 
 \end{itemize}
 
 Este algoritmo (Q-Learning) tiene los problemas de que no aprende la noción de estados similares y de que a nivel practico no escala bien, se vuelve intratable (no es el caso teórico). Una alternativa para evitar esto, es aproximar la función Q del algoritmo con una red neuronal de convolución.
+
+\subsubsection*{Algoritmo}
+\begin{enumerate}
+    \item Inicializar $Q(s,a)$
+    \item Inicializar $s$
+    \item Elegir la acción $a$ en $s$ y ejecutarla
+    \item Observar la recompensa $r$ en el nuevo estado $s'$
+    \item Repetir a partir de 2 hasta que el estado $s$ sea terminal.
+\end{enumerate}
+
+Gif mostrando un \href{http://ikuz.eu/wp-content/uploads/2015/02/breakout.gif}{ejemplo}. Este seria el caso ya entrenado, donde lo que aprendió es a mover la pelota para el fondo del juego, de forma tal de que rebote sola y limpie el mapa. Al comienzo apenas responde.
 
 \newpage
 
