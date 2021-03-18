@@ -1,3 +1,3 @@
-[submodule "TPs"]
-	path = TPs
+[submodule "TP-Organizacion-de-datos"]
+	path = TP-Organizacion-de-datos
 	url = https://github.com/brunograssano/TP-Organizacion-de-datos
