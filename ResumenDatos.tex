@@ -125,10 +125,10 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
 
 \subsubsection*{Algoritmo}
 \begin{enumerate}
-    \item Particionar los datos en k dimensiones. %%% revisar
-    \item Elegir k centroides.
+    \item Elegir k centroides al azar.
     \item Asignar cada instancia al centroide mas cercano.
-    \item Repetir 2 y 3
+    \item Recomputar el centroide de cada cluster.
+    \item Repetir paso 2 y 3 hasta que los centroides no cambien.
 \end{enumerate}
 
 
@@ -144,7 +144,7 @@ Algoritmo que busca minimizar la ecuación de distorsión de clustering. Tengo l
     \item Especificar K
     \item Sensible a ruido
     \item Muy sensible a la elección de centroides iniciales.
-    \item Solo encuentra clusters globales.
+    \item Solo encuentra clusters globulares.
 \end{itemize}
 
 
@@ -563,10 +563,22 @@ Modelo que busca que una recta/hiper-plano separe las clases de la mejor forma p
     \item Es iterativo, puede escalar en tiempo.
     \item Va a converger, no hay óptimos locales.
     \item Las instancias mas cercanas se vuelven 'Support Vectors'
-    \item De hiper-parámetro tiene M, que determina el margen, es decir, el espacio entre los distintos tipos de puntos. Busca el caso que maximice esto.
+    \item Busca maximizar el M (margen), el espacio entre los distintos tipos de puntos.
     \item Si no encontró una recta/hiper-plano, los puntos no son linealmente separables.
     \item Se consigue la recta creando una nueva dimensión. Como esto es costoso se puede utilizar Kernel Trick, que hace que se 'piense que esta en otra dimensión'. \textit{Ej. lineal, polinomial, sigmoideo, rbf}
 \end{itemize}
+
+\begin{center}
+\begin{math}
+W \cdot X + b > 0
+\end{math}
+Para la clase A.
+
+\begin{math}
+W \cdot X + b < 0
+\end{math}
+Para la clase B.
+\end{center}
 
 \subsubsection*{Hard Margin vs Soft Margin}
 
@@ -574,7 +586,7 @@ En Hard Margin los puntos están perfectamente separados. Esto hace que el model
 
 En Soft Margin se permite algo de ruido y outliers.
 
-Este hiper-parámetro se controla con el C. A mayor C sae tiene HM, a menor SM.
+Este hiper-parámetro se controla con el C. A mayor C se tiene HM, a menor SM.
 
 \begin{figure}[!htb]
     \centering
